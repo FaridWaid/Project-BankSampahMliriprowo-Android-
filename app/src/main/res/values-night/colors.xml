@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="primary">#00BFA6</color>
+    <color name="second_primary">#BAFFB4</color>
+    <color name="background">#252C4B</color>
+    <color name="card_background">#27325F</color>
+    <color name="primary_text">#565B65</color>
+    <color name="secondary_text">#9B9A9D</color>
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000</color>
+    <color name="dashboard_item_1">#04009A</color>
+    <color name="dashboard_item_2">#77ACF1</color>
+    <color name="dashboard_item_3">#3EDBF0</color>
+    <color name="dashboard_item_4">#C0FEFC</color>
+</resources>
