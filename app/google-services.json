@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1036532907750",
+    "project_id": "bank-sampah-mliriprowo",
+    "storage_bucket": "bank-sampah-mliriprowo.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1036532907750:android:cb964e77a8cc56e2524527",
+        "android_client_info": {
+          "package_name": "com.faridwaid.banksampahmliriprowo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1036532907750-8hljpj439h7jjobknesu1ljo341bpcn3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDxyJ8iLe9-scTZxGBNCX8_tqpXHDxqePk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1036532907750-8hljpj439h7jjobknesu1ljo341bpcn3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

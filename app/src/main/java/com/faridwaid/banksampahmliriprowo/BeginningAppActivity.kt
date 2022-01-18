@@ -11,6 +11,7 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.view.get
 import androidx.viewpager2.widget.ViewPager2
+import com.google.firebase.auth.FirebaseAuth
 
 class BeginningAppActivity : AppCompatActivity() {
 
@@ -49,10 +50,15 @@ class BeginningAppActivity : AppCompatActivity() {
     private lateinit var indicatorContainer: LinearLayout
     private lateinit var buttonNext: Button
     private lateinit var textSkipIntro: TextView
+    // Mendefinisikan variabel global untuk connect ke Firebase
+    private lateinit var auth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_beginning_app)
+
+        // Mengisi variabel auth dengan fungsi yang ada pada FirebaseAuth
+        auth = FirebaseAuth.getInstance()
 
         // Mengambil Id dari view pager 2 dan dijadikan variabel
         val introSlideViewPager: ViewPager2 = findViewById(R.id.introSliderViewPager)
@@ -145,6 +151,18 @@ class BeginningAppActivity : AppCompatActivity() {
                         R.drawable.indicator_inactive
                     )
                 )
+            }
+        }
+    }
+
+    // Membuat fungsi "onStart"
+    override fun onStart() {
+        super.onStart()
+        // Jika user sudah ada user yang login maka akan langsung diarahkan ke HomeActivity
+        if (auth.currentUser != null){
+            Intent(this@BeginningAppActivity, HomeActivity::class.java).also { intent ->
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                startActivity(intent)
             }
         }
     }

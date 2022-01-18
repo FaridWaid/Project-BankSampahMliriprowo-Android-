@@ -3,11 +3,20 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Dev/Android_Learning/BankSampahMliriprowo/app/src/main/res/drawable/ic_email.xml" value="0.2462962962962963" />
+        <entry key="..\:/Dev/Android_Learning/BankSampahMliriprowo/app/src/main/res/drawable/ic_username.xml" value="0.2462962962962963" />
         <entry key="..\:/Dev/Android_Learning/BankSampahMliriprowo/app/src/main/res/drawable/indicator_active.xml" value="0.25092592592592594" />
         <entry key="..\:/Dev/Android_Learning/BankSampahMliriprowo/app/src/main/res/drawable/indicator_inactive.xml" value="0.25092592592592594" />
+        <entry key="..\:/Dev/Android_Learning/BankSampahMliriprowo/app/src/main/res/drawable/rounded_border.xml" value="0.2462962962962963" />
+        <entry key="..\:/Dev/Android_Learning/BankSampahMliriprowo/app/src/main/res/drawable/rounded_border2.xml" value="0.2462962962962963" />
         <entry key="..\:/Dev/Android_Learning/BankSampahMliriprowo/app/src/main/res/layout/activity_beginning_app.xml" value="0.1793478260869565" />
+        <entry key="..\:/Dev/Android_Learning/BankSampahMliriprowo/app/src/main/res/layout/activity_home.xml" value="0.24139492753623187" />
+        <entry key="..\:/Dev/Android_Learning/BankSampahMliriprowo/app/src/main/res/layout/activity_login.xml" value="0.2" />
+        <entry key="..\:/Dev/Android_Learning/BankSampahMliriprowo/app/src/main/res/layout/activity_register.xml" value="0.17300724637681159" />
         <entry key="..\:/Dev/Android_Learning/BankSampahMliriprowo/app/src/main/res/layout/activity_splash_screen.xml" value="0.1793478260869565" />
+        <entry key="..\:/Dev/Android_Learning/BankSampahMliriprowo/app/src/main/res/layout/rounded_border.xml" value="0.17300724637681159" />
         <entry key="..\:/Dev/Android_Learning/BankSampahMliriprowo/app/src/main/res/layout/slide_item_container.xml" value="0.1793478260869565" />
+        <entry key="..\:/Dev/Android_Learning/BankSampahMliriprowo/app/src/main/res/menu/option_menu.xml" value="0.25416666666666665" />
       </map>
     </option>
   </component>
