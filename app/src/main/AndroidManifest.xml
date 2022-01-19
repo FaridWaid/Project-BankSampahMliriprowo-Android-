@@ -10,7 +10,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BankSampahMliriprowo">
         <activity
-            android:name=".HomeActivity"
+            android:name=".admin.HomeAdminActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ForgotPasswordActivity"
+            android:exported="false" />
+        <activity
+            android:name=".user.HomeActivity"
             android:exported="false" />
         <activity
             android:name=".RegisterActivity"

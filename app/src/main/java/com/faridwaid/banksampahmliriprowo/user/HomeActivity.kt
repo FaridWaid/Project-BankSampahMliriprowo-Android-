@@ -1,10 +1,12 @@
-package com.faridwaid.banksampahmliriprowo
+package com.faridwaid.banksampahmliriprowo.user
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import com.faridwaid.banksampahmliriprowo.LoginActivity
+import com.faridwaid.banksampahmliriprowo.R
 import com.google.firebase.auth.FirebaseAuth
 
 class HomeActivity : AppCompatActivity() {

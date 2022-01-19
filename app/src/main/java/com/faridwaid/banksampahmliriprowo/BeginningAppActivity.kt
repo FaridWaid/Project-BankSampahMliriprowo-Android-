@@ -11,6 +11,7 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.view.get
 import androidx.viewpager2.widget.ViewPager2
+import com.faridwaid.banksampahmliriprowo.user.HomeActivity
 import com.google.firebase.auth.FirebaseAuth
 
 class BeginningAppActivity : AppCompatActivity() {
