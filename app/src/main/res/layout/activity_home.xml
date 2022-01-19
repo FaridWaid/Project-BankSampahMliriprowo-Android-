@@ -15,14 +15,42 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
+<!--    <com.google.android.material.bottomnavigation.BottomNavigationView-->
+<!--        android:id="@+id/nav_bottom"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:background="?android:attr/windowBackground"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:menu="@menu/bottom_nav_menu"/>-->
+
+    <me.ibrahimsn.lib.SmoothBottomBar
+        android:id="@+id/nav_bottom"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
-        android:text="User"
-        android:gravity="center"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_height="60dp"
+        android:background="?android:attr/windowBackground"
+        app:backgroundColor="@color/background"
+        app:iconSize="18dp"
+        app:iconTint="@color/bottom_bar_icon_tint"
+        app:iconTintActive="@color/bottom_bar_icon_tint_active"
+        app:indicatorColor="@color/bottom_bar_indicator_color"
+        app:indicatorRadius="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:menu="@menu/bottom_nav_menu"
+        app:textColor="@color/bottom_bar_text_color"
+        app:textSize="10sp" />
+
+    <fragment
+        android:id="@+id/nav_host_fragment"
+        android:name="androidx.navigation.fragment.NavHostFragment"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:defaultNavHost="true"
+        app:layout_constraintBottom_toTopOf="@+id/nav_bottom"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        app:navGraph="@navigation/mobile_navigation"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
