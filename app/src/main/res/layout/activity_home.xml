@@ -6,31 +6,12 @@
     android:layout_height="match_parent"
     tools:context=".user.HomeActivity">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/primary"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-<!--    <com.google.android.material.bottomnavigation.BottomNavigationView-->
-<!--        android:id="@+id/nav_bottom"-->
-<!--        android:layout_width="0dp"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:background="?android:attr/windowBackground"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:menu="@menu/bottom_nav_menu"/>-->
-
     <me.ibrahimsn.lib.SmoothBottomBar
         android:id="@+id/nav_bottom"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:background="?android:attr/windowBackground"
-        app:backgroundColor="@color/background"
+        app:backgroundColor="@color/primary"
         app:iconSize="18dp"
         app:iconTint="@color/bottom_bar_icon_tint"
         app:iconTintActive="@color/bottom_bar_icon_tint_active"
@@ -50,7 +31,7 @@
         app:layout_constraintBottom_toTopOf="@+id/nav_bottom"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar"
-        app:navGraph="@navigation/mobile_navigation"/>
+        app:layout_constraintTop_toTopOf="parent"
+        app:navGraph="@navigation/mobile_navigation" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

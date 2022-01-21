@@ -86,6 +86,7 @@ class BeginningAppActivity : AppCompatActivity() {
 
         // Ketika "buttonNext" diklik akan pindah ke data selanjutnya,
         // dan jika sudah berada pada data terakhir maka akan pindah activity ke LoginActivity
+        // overridePendingTransition digunakan untuk animasi dari intent
         buttonNext.setOnClickListener {
             if (introSlideViewPager.currentItem + 1 < introSlideAdapter.itemCount){
                 introSlideViewPager.currentItem += 1
@@ -93,15 +94,18 @@ class BeginningAppActivity : AppCompatActivity() {
                 // Pindah ke LoginActivity
                 Intent(applicationContext, LoginActivity::class.java).also {
                     startActivity(it)
+                    overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right)
                     finish()
                 }
             }
         }
 
         // Ketika "textSkipIntro" diklik akan pindah activity ke LoginActivity
+        // overridePendingTransition digunakan untuk animasi dari intent
         textSkipIntro.setOnClickListener {
             Intent(applicationContext, LoginActivity::class.java).also {
                 startActivity(it)
+                overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right)
                 finish()
             }
         }

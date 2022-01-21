@@ -58,4 +58,10 @@ dependencies {
 
     // Smooth Bottom Bar
     implementation 'com.github.ibrahimsn98:SmoothBottomBar:1.7.8'
+
+    //circle image
+    implementation 'de.hdodenhof:circleimageview:2.1.0'
+
+    //picasso
+    implementation 'com.squareup.picasso:picasso:2.71828'
 }

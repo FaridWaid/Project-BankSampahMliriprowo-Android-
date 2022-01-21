@@ -1,12 +1,15 @@
 package com.faridwaid.banksampahmliriprowo
 
+import android.content.DialogInterface
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
 import android.util.Patterns
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import com.faridwaid.banksampahmliriprowo.user.HomeActivity
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
@@ -38,6 +41,7 @@ class RegisterActivity : AppCompatActivity() {
             // Menggunakan fungsi intent dan mendifinisakan tujuan activity selanjutnya
             Intent(this@RegisterActivity, LoginActivity::class.java).also {
                 startActivity(it)
+                overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left)
                 // Untuk mengakhiri activity, agar ketika diklik back, tidak kembali ke LoginActivity
                 finish()
             }
@@ -82,16 +86,54 @@ class RegisterActivity : AppCompatActivity() {
 
             // Jika semua sudah diisi maka akan melakukan "createNewUser"
             if (validEmail && validPassword && validUsername) {
+                loadingBar(1000)
                 // Memanggil fungsi "createNewUser" dengan membawa variabel ("username","email","password"),
                 // Fungsi ini digunakan untuk membuat user baru
                 createNewUser(username, email, password)
             }else {
+                loadingBar(1000)
+                alertDialog("Gagal membuat akun!", "Pastikan anda menginputkan nama, email, dan password dengan benar!", false)
                 // Jika gagal maka akan memunculkan toast gagal
-                Toast.makeText(this, "Gagal membuat akun!", Toast.LENGTH_SHORT).show()
             }
         }
 
 
+    }
+
+    // Membuat fungsi "alertDialog" dengan parameter title, message, dan backActivity
+    // Fungsi ini digunakan untuk menampilkan alert dialog
+    private fun alertDialog(title: String, message: String, backActivity: Boolean){
+        // Membuat variabel yang berisikan AlertDialog
+        val alertDialog = AlertDialog.Builder(this)
+        alertDialog.apply {
+            // Menambahkan title dan pesan ke dalam alert dialog
+            setTitle(title)
+            setMessage(message)
+            window.setBackgroundDrawableResource(android.R.color.background_light)
+            setPositiveButton(
+                "OK",
+                DialogInterface.OnClickListener { dialogInterface, i ->
+                    dialogInterface.dismiss()
+                    if (backActivity){
+                        onBackPressed()
+                    }
+                })
+        }
+        alertDialog.show()
+    }
+
+    // Membuat fungsi "loadingBar" dengan parameter time,
+    // Fungsi ini digunakan untuk menampilkan loading dialog
+    private fun loadingBar(time: Long) {
+        val loading = LoadingDialog(this)
+        loading.startDialog()
+        val handler = Handler()
+        handler.postDelayed(object: Runnable{
+            override fun run() {
+                loading.isDissmis()
+            }
+
+        }, time)
     }
 
     // Membuat fungsi "createNewUser"
@@ -112,7 +154,6 @@ class RegisterActivity : AppCompatActivity() {
                         ref.child(idUser).setValue(newUser).addOnCompleteListener {
                             // Jika berhasil menambahkan child baru ke realtime database, maka akan memunculkan toast,
                             // Kemudian pindah activity ke activity LoginActivity
-                            Toast.makeText(this, "Akun anda berhasil dibuat!", Toast.LENGTH_SHORT).show()
                             Intent(this@RegisterActivity, LoginActivity::class.java).also { intent ->
                                 intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                                 startActivity(intent)
@@ -120,11 +161,11 @@ class RegisterActivity : AppCompatActivity() {
                         }
                     } else {
                         // Jika gagal menambahkan child baru ke realtime database, maka akan memunculkan toast gagal
-                        Toast.makeText(this, "Gagal membuat akun!", Toast.LENGTH_SHORT).show()
+                        alertDialog("Gagal membuat akun!", "Pastikan anda menginputkan nama, email, dan password dengan benar!", false)
                     }
                 } else{
                     // Jika gagal membuat akun baru, maka akan memunculkan toast error
-                    Toast.makeText(this, "${it.exception?.message}", Toast.LENGTH_SHORT).show()
+                    alertDialog("Gagal membuat akun!", "${it.exception?.message}!", false)
                 }
             }
     }
@@ -198,17 +239,6 @@ class RegisterActivity : AppCompatActivity() {
         if(password.length < 6) {
             return "Password Harus Lebih Dari 6 Karakter!"
         }
-//        if(!password.matches(".*[A-Z].*".toRegex())) {
-//            return "Password Setidaknya Harus Memiliki 1 Huruf Besar"
-//        }
-//        if(!password.matches(".*[a-z].*".toRegex()))
-//        {
-//            return "Must Contain 1 Lower-case Character"
-//        }
-//        if(!password.matches(".*[@#\$%^&+=].*".toRegex()))
-//        {
-//            return "Must Contain 1 Special Character (@#\$%^&+=)"
-//        }
         return null
     }
 

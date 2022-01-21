@@ -18,4 +18,20 @@
     <string name="profile">Profile</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="ubah_data_pribadi">Ubah Data Pribadi</string>
+    <string name="nama_anda">Nama Anda</string>
+    <string name="saldo">Saldo</string>
+    <string name="your_saldo">Your Saldo</string>
+    <string name="email_anda">Email Anda</string>
+    <string name="simpan_data_perubahan">Simpan Data Perubahan</string>
+    <string name="ubah_password">Ubah Password?</string>
+    <string name="keterangan2">Pastikan password baru yang anda buat dapat cukup aman dan mudah diingat!</string>
+    <string name="password_lama">Password Lama</string>
+    <string name="password_baru">Password Baru</string>
+    <string name="konfirmasi_password">Konfirmasi Password</string>
+    <string name="data_pribadi">Data Pribadi</string>
+    <string name="your_name">Your Name</string>
+    <string name="your_email">Your Email</string>
+    <string name="logout">logout</string>
+    <string name="loading">Loading...</string>
 </resources>

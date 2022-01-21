@@ -1,12 +1,15 @@
 package com.faridwaid.banksampahmliriprowo
 
+import android.content.DialogInterface
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
 import android.util.Patterns
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import com.faridwaid.banksampahmliriprowo.admin.HomeAdminActivity
 import com.faridwaid.banksampahmliriprowo.user.HomeActivity
 import com.google.android.material.textfield.TextInputEditText
@@ -35,6 +38,7 @@ class LoginActivity : AppCompatActivity() {
             // Menggunakan fungsi intent dan mendifinisakan tujuan activity selanjutnya
             Intent(this@LoginActivity, RegisterActivity::class.java).also {
                 startActivity(it)
+                overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right)
                 // Untuk mengakhiri activity, agar ketika diklik back, tidak kembali ke LoginActivity
                 finish()
             }
@@ -72,31 +76,72 @@ class LoginActivity : AppCompatActivity() {
             // Jika semua sudah diisi maka akan melakukan "loginUser"
             if (validEmail && validPassword) {
                 if (email == "oneoclock05@gmail.com" && password == "oneokrock"){
+                    loadingBar(1000)
                     // Jika berhasil maka akan pindah activity ke activity HomeAdminActivity
                     Intent(this@LoginActivity, HomeAdminActivity::class.java).also { intent ->
                         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                         startActivity(intent)
                     }
                 } else{
+                    loadingBar(1000)
                     // Memanggil fungsi "loginUser" dengan membawa variabel ("username","email","password"),
                     // Fungsi ini digunakan untuk masuk ke halaman user
                     loginUser(email, password)
                 }
             }else{
+                loadingBar(1000)
+                alertDialog("Gagal Login Ke Akun!", "Pastikan email dan password yang anda inputkan sudah benar!", false)
                 // Jika gagal maka akan memunculkan toast gagal
-                Toast.makeText(this, "Gagal login ke akun!", Toast.LENGTH_SHORT).show()
             }
         }
 
         // Mendefinisikan variabel lupa password
+        // overridePendingTransition digunakan untuk animasi dari intent
         val forgotPassword: TextView = findViewById(R.id.forgotPassword)
         forgotPassword.setOnClickListener {
             // Jika berhasil maka akan pindah ke ForgotPasswordActivity
             Intent(this@LoginActivity, ForgotPasswordActivity::class.java).also { intent ->
                 startActivity(intent)
+                overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right)
             }
         }
 
+    }
+
+    // Membuat fungsi "alertDialog" dengan parameter title, message, dan backActivity
+    // Fungsi ini digunakan untuk menampilkan alert dialog
+    private fun alertDialog(title: String, message: String, backActivity: Boolean){
+        // Membuat variabel yang berisikan AlertDialog
+        val alertDialog = AlertDialog.Builder(this)
+        alertDialog.apply {
+            // Menambahkan title dan pesan ke dalam alert dialog
+            setTitle(title)
+            setMessage(message)
+            window.setBackgroundDrawableResource(android.R.color.background_light)
+            setPositiveButton(
+                "OK",
+                DialogInterface.OnClickListener { dialogInterface, i ->
+                    dialogInterface.dismiss()
+                    if (backActivity){
+                        onBackPressed()
+                    }
+                })
+        }
+        alertDialog.show()
+    }
+
+    // Membuat fungsi "loadingBar" dengan parameter time,
+    // Fungsi ini digunakan untuk menampilkan loading dialog
+    private fun loadingBar(time: Long) {
+        val loading = LoadingDialog(this)
+        loading.startDialog()
+        val handler = Handler()
+        handler.postDelayed(object: Runnable{
+            override fun run() {
+                loading.isDissmis()
+            }
+
+        }, time)
     }
 
     // Membuat fungsi "createNewUser"
@@ -112,7 +157,7 @@ class LoginActivity : AppCompatActivity() {
                     }
                 } else{
                     // Jika gagal membuat akun baru, maka akan memunculkan toast error
-                    Toast.makeText(this, "Email dan Password Tidak Cocok!", Toast.LENGTH_SHORT).show()
+                    alertDialog("Gagal Login Ke Akun!", "Pastikan email dan password yang anda inputkan sudah benar!", false)
                 }
             }
     }
@@ -163,17 +208,6 @@ class LoginActivity : AppCompatActivity() {
         if(password.length < 6) {
             return "Password Harus Lebih Dari 6 Karakter!"
         }
-//        if(!password.matches(".*[A-Z].*".toRegex())) {
-//            return "Password Setidaknya Harus Memiliki 1 Huruf Besar"
-//        }
-//        if(!password.matches(".*[a-z].*".toRegex()))
-//        {
-//            return "Must Contain 1 Lower-case Character"
-//        }
-//        if(!password.matches(".*[@#\$%^&+=].*".toRegex()))
-//        {
-//            return "Must Contain 1 Special Character (@#\$%^&+=)"
-//        }
         return null
     }
 
