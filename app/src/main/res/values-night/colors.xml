@@ -13,8 +13,10 @@
     <color name="bottom_bar_icon_tint">#CFD0E2</color>
     <color name="bottom_bar_icon_tint_active">#35B7CF</color>
     <color name="bottom_bar_text_color">#35B7CF</color>
-    <color name="dashboard_item_1">#04009A</color>
+    <color name="dashboard_item_1">#F94892</color>
     <color name="dashboard_item_2">#77ACF1</color>
-    <color name="dashboard_item_3">#3EDBF0</color>
+    <color name="dashboard_item_3">#FBF46D</color>
     <color name="dashboard_item_4">#C0FEFC</color>
+    <color name="dashboard_item_5">#F5EEDC</color>
+    <color name="dashboard_item_6">#DD4A48</color>
 </resources>
