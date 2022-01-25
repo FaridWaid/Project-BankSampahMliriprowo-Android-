@@ -1,0 +1,413 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/background"
+    tools:context=".admin.HomeAdminFragment">
+
+    <View
+        android:id="@+id/viewHeaderBackground"
+        android:layout_width="match_parent"
+        android:layout_height="125dp"
+        android:background="@color/primary"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardProfilePicture"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" >
+
+        <ImageView
+            android:id="@+id/profilePicture"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:contentDescription="@string/app_name"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_profile" />
+
+    </androidx.cardview.widget.CardView>
+
+    <TextView
+        android:id="@+id/helloUser"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:text="Hello Admin"
+        android:textColor="@color/primary_text"
+        android:textSize="18dp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@id/cardProfilePicture"
+        app:layout_constraintEnd_toStartOf="@id/cardProfilePicture"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/cardProfilePicture" />
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cardHeader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        app:cardBackgroundColor="@color/card_background"
+        app:cardCornerRadius="16dp"
+        app:layout_constraintBottom_toBottomOf="@id/viewHeaderBackground"
+        app:layout_constraintTop_toBottomOf="@id/viewHeaderBackground" >
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="14dp" >
+
+            <TextView
+                android:id="@+id/textViews"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Record Bank Sampah"
+                android:textColor="@color/primary"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <LinearLayout
+                android:id="@+id/layoutPengumpulan"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toStartOf="@id/layoutPenarikan"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/textViews" >
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:src="@drawable/bank" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="Saldo Bank Sampah"
+                    android:textColor="@color/secondary_text"
+                    android:textSize="10sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:textColor="@color/primary_text"
+                    android:textSize="16sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layoutPenarikan"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toStartOf="@id/layoutSaldo"
+                app:layout_constraintStart_toEndOf="@id/layoutPengumpulan"
+                app:layout_constraintTop_toBottomOf="@id/textViews" >
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:src="@drawable/user" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="Jumlah Anggota"
+                    android:textColor="@color/secondary_text"
+                    android:textSize="10sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:textColor="@color/primary_text"
+                    android:textSize="16sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layoutSaldo"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/layoutPenarikan"
+                app:layout_constraintTop_toBottomOf="@id/textViews" >
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:src="@drawable/tempat_sampah" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="Jumlah Sampah"
+                    android:textColor="@color/secondary_text"
+                    android:textSize="10sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:textColor="@color/primary_text"
+                    android:textSize="16sp" />
+
+            </LinearLayout>
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/itemFitur1"
+        android:layout_width="90dp"
+        android:layout_height="90dp"
+        android:layout_marginTop="30dp"
+        app:cardBackgroundColor="@color/dashboard_item_1"
+        app:cardCornerRadius="14dp"
+        app:layout_constraintEnd_toStartOf="@id/itemFitur2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cardHeader">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="8dp"
+            android:src="@drawable/all_user"/>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="Daftar Anggota"
+        android:textColor="@color/secondary_text"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:textSize="12sp"
+        app:layout_constraintStart_toStartOf="@id/itemFitur1"
+        app:layout_constraintEnd_toEndOf="@id/itemFitur1"
+        app:layout_constraintTop_toBottomOf="@id/itemFitur1"/>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/itemFitur2"
+        android:layout_width="90dp"
+        android:layout_height="90dp"
+        android:layout_marginTop="30dp"
+        app:cardBackgroundColor="@color/dashboard_item_5"
+        app:cardCornerRadius="14dp"
+        app:layout_constraintStart_toEndOf="@id/itemFitur1"
+        app:layout_constraintEnd_toStartOf="@id/itemFitur3"
+        app:layout_constraintTop_toBottomOf="@id/cardHeader">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="8dp"
+            android:src="@drawable/tempat_sampah2"/>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="Daftar Sampah"
+        android:textColor="@color/secondary_text"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:textSize="12sp"
+        app:layout_constraintStart_toStartOf="@id/itemFitur2"
+        app:layout_constraintEnd_toEndOf="@id/itemFitur2"
+        app:layout_constraintTop_toBottomOf="@id/itemFitur2"/>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/itemFitur3"
+        android:layout_width="90dp"
+        android:layout_height="90dp"
+        android:layout_marginTop="30dp"
+        app:cardBackgroundColor="@color/dashboard_item_3"
+        app:cardCornerRadius="14dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/itemFitur2"
+        app:layout_constraintTop_toBottomOf="@id/cardHeader">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="8dp"
+            android:src="@drawable/pengumpulan_all_user"/>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="Daftar Pengumpulan\n Sampah"
+        android:textColor="@color/secondary_text"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:textSize="12sp"
+        app:layout_constraintStart_toStartOf="@id/itemFitur3"
+        app:layout_constraintEnd_toEndOf="@id/itemFitur3"
+        app:layout_constraintTop_toBottomOf="@id/itemFitur3"/>
+
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/itemFitur4"
+        android:layout_width="90dp"
+        android:layout_height="90dp"
+        android:layout_marginTop="60dp"
+        app:cardBackgroundColor="@color/dashboard_item_2"
+        app:cardCornerRadius="14dp"
+        app:layout_constraintEnd_toStartOf="@id/itemFitur5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/itemFitur1">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="8dp"
+            android:src="@drawable/penarikan_user"/>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="Daftar Penarikan\n Saldo"
+        android:textColor="@color/secondary_text"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:textSize="12sp"
+        app:layout_constraintStart_toStartOf="@id/itemFitur4"
+        app:layout_constraintEnd_toEndOf="@id/itemFitur4"
+        app:layout_constraintTop_toBottomOf="@id/itemFitur4"/>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/itemFitur5"
+        android:layout_width="90dp"
+        android:layout_height="90dp"
+        android:layout_marginTop="60dp"
+        app:cardBackgroundColor="@color/dashboard_item_7"
+        app:cardCornerRadius="14dp"
+        app:layout_constraintStart_toEndOf="@id/itemFitur4"
+        app:layout_constraintEnd_toStartOf="@id/itemFitur6"
+        app:layout_constraintTop_toBottomOf="@id/itemFitur2">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="8dp"
+            android:src="@drawable/penjualan_bank"/>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="Daftar Penjualan\n Sampah"
+        android:textColor="@color/secondary_text"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:textSize="12sp"
+        app:layout_constraintStart_toStartOf="@id/itemFitur5"
+        app:layout_constraintEnd_toEndOf="@id/itemFitur5"
+        app:layout_constraintTop_toBottomOf="@id/itemFitur5"/>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/itemFitur6"
+        android:layout_width="90dp"
+        android:layout_height="90dp"
+        android:layout_marginTop="60dp"
+        app:cardBackgroundColor="@color/dashboard_item_6"
+        app:cardCornerRadius="14dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/itemFitur5"
+        app:layout_constraintTop_toBottomOf="@id/itemFitur3">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="8dp"
+            android:src="@drawable/notifications"/>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:gravity="center"
+        android:text="Notifikasi"
+        android:textColor="@color/secondary_text"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@id/itemFitur6"
+        app:layout_constraintStart_toStartOf="@id/itemFitur6"
+        app:layout_constraintTop_toBottomOf="@id/itemFitur6" />
+
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/itemFitur7"
+        android:layout_width="90dp"
+        android:layout_height="90dp"
+        android:layout_marginTop="60dp"
+        app:cardBackgroundColor="@color/dashboard_item_4"
+        app:cardCornerRadius="14dp"
+        app:layout_constraintEnd_toStartOf="@id/itemFitur5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/itemFitur4">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="8dp"
+            android:src="@drawable/jadwal_pengumpulan_sampah"/>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="Jadwal Pengumpulan\n Sampah"
+        android:textColor="@color/secondary_text"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:textSize="12sp"
+        app:layout_constraintStart_toStartOf="@id/itemFitur7"
+        app:layout_constraintEnd_toEndOf="@id/itemFitur7"
+        app:layout_constraintTop_toBottomOf="@id/itemFitur7"/>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

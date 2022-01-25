@@ -10,21 +10,27 @@ import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import com.faridwaid.banksampahmliriprowo.admin.Admin
 import com.faridwaid.banksampahmliriprowo.admin.HomeAdminActivity
 import com.faridwaid.banksampahmliriprowo.user.HomeActivity
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.*
 
 class LoginActivity : AppCompatActivity() {
 
     // Mendefinisikan variabel global untuk connect ke Firebase
     private lateinit var auth: FirebaseAuth
+    private lateinit var referen : DatabaseReference
     // Mendefinisikan variabel global dari view
     private lateinit var etEmail: TextInputEditText
     private lateinit var emailContainer: TextInputLayout
     private lateinit var etPassword: TextInputEditText
     private lateinit var passwordContainer: TextInputLayout
+    // Mendifinisikan variabel global untuk login admin
+    private lateinit var emailAdmin: String
+    private lateinit var passwordAdmin: String
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,6 +52,22 @@ class LoginActivity : AppCompatActivity() {
 
         // Mengisi variabel auth dengan fungsi yang ada pada FirebaseAuth
         auth = FirebaseAuth.getInstance()
+
+        // Mendefinisikan variabel referen yang akan digunakan untuk mengedintifikasi admin/user
+        referen = FirebaseDatabase.getInstance().getReference("users").child("admin")
+
+        // Mengambil data user dengan referen dan dimasukkan kedalam view (text,etc)
+        val menuListener = object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                val admin = dataSnapshot.getValue(Admin::class.java)
+                emailAdmin = admin?.email!!
+                passwordAdmin = admin?.password!!
+            }
+            override fun onCancelled(databaseError: DatabaseError) {
+                // handle error
+            }
+        }
+        referen.addListenerForSingleValueEvent(menuListener)
 
         // Mendefinisikan variabel edit text yang nantinya akan berisi inputan user
         etEmail = findViewById(R.id.etEmail)
@@ -75,7 +97,7 @@ class LoginActivity : AppCompatActivity() {
 
             // Jika semua sudah diisi maka akan melakukan "loginUser"
             if (validEmail && validPassword) {
-                if (email == "oneoclock05@gmail.com" && password == "oneokrock"){
+                if (email == emailAdmin && password == passwordAdmin){
                     loadingBar(1000)
                     // Jika berhasil maka akan pindah activity ke activity HomeAdminActivity
                     Intent(this@LoginActivity, HomeAdminActivity::class.java).also { intent ->

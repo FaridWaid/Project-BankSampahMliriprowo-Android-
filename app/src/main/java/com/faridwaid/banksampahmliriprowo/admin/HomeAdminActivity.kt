@@ -5,9 +5,13 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.PopupMenu
+import androidx.navigation.NavController
+import androidx.navigation.findNavController
 import com.faridwaid.banksampahmliriprowo.LoginActivity
 import com.faridwaid.banksampahmliriprowo.R
 import com.google.firebase.auth.FirebaseAuth
+import me.ibrahimsn.lib.SmoothBottomBar
 
 class HomeAdminActivity : AppCompatActivity() {
 
@@ -18,31 +22,19 @@ class HomeAdminActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home_admin)
 
-        // Mendefinisikan variabel yang digunukan untuk toolbar
-        val toolbar: androidx.appcompat.widget.Toolbar = findViewById(R.id.toolbar)
-        setSupportActionBar(toolbar)
-
         // Mengisi variabel auth dengan fungsi yang ada pada FirebaseAuth
         auth = FirebaseAuth.getInstance()
+
+        // Mendefinisikan NavController yang nantinya akan digunakan untuk control fragment
+        val navController: NavController = findNavController(R.id.nav_host_fragment_admin)
+
+        // setup smooth bar menu
+        val popUpMenu =  PopupMenu(this, null)
+        popUpMenu.inflate(R.menu.bottom_nav_menu)
+        val menu = popUpMenu.menu
+        val navBottom: SmoothBottomBar = findViewById(R.id.nav_bottom)
+        navBottom.setupWithNavController(menu, navController)
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.option_menu, menu)
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when(item.itemId){
-            R.id.logout ->{
-                auth.signOut()
-                Intent(this@HomeAdminActivity, LoginActivity::class.java).also { intent ->
-                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                    startActivity(intent)
-                }
-                return true
-            }
-            else -> return true
-        }
-    }
 
 }
