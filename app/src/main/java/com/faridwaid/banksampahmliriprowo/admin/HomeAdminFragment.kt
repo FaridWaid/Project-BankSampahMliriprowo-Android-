@@ -1,5 +1,6 @@
 package com.faridwaid.banksampahmliriprowo.admin
 
+import android.content.Intent
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.os.Handler
@@ -9,9 +10,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import com.faridwaid.banksampahmliriprowo.ForgotPasswordActivity
 import com.faridwaid.banksampahmliriprowo.LoadingDialog
 import com.faridwaid.banksampahmliriprowo.R
 import com.faridwaid.banksampahmliriprowo.Users
+import com.faridwaid.banksampahmliriprowo.user.UpdateDataPofileActivity
+import com.google.android.material.card.MaterialCardView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.google.firebase.storage.FirebaseStorage
@@ -36,7 +40,7 @@ class HomeAdminFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Mendefinisikan variabel edit text yang nantinya akan berisi inputan user
+        // Mendefinisikan variabel yang berisi view
         textName = view.findViewById(R.id.helloUser)
         photoProfil = view.findViewById(R.id.profilePicture)
 
@@ -73,6 +77,17 @@ class HomeAdminFragment : Fragment() {
             }
         }
         referen.addListenerForSingleValueEvent(menuListener)
+
+        // Mendefinisikan variabel item fitur 7
+        // overridePendingTransition digunakan untuk animasi dari intent
+        val jadwalPengumpulanSampah: MaterialCardView = view.findViewById(R.id.itemFitur7)
+        jadwalPengumpulanSampah.setOnClickListener {
+            // Jika berhasil maka akan pindah ke JadwalPengumpulanSampahAdminActivity
+            requireActivity().run{
+                startActivity(Intent(this, JadwalPengumpulanSampahAdminActivity::class.java))
+                overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right)
+            }
+        }
 
     }
 
