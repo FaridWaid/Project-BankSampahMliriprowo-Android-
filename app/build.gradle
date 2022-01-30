@@ -62,7 +62,7 @@ dependencies {
     //circle image
     implementation 'de.hdodenhof:circleimageview:2.1.0'
 
-    //picasso
+    //Picasso for image loading
     implementation 'com.squareup.picasso:picasso:2.71828'
 
     // Rounded ImageView

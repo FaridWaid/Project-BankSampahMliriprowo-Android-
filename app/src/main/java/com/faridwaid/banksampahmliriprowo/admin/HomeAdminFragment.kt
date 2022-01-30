@@ -89,6 +89,17 @@ class HomeAdminFragment : Fragment() {
             }
         }
 
+        // Mendefinisikan variabel item fitur 2
+        // overridePendingTransition digunakan untuk animasi dari intent
+        val daftarSampah: MaterialCardView = view.findViewById(R.id.itemFitur2)
+        daftarSampah.setOnClickListener {
+            // Jika berhasil maka akan pindah ke DaftarSampahAdminActivity
+            requireActivity().run{
+                startActivity(Intent(this, DaftarSampahAdminActivity::class.java))
+                overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right)
+            }
+        }
+
     }
 
     // Membuat fungsi "loadingBar" dengan parameter time,

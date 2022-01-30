@@ -34,4 +34,25 @@
     <string name="your_email">Your Email</string>
     <string name="logout">logout</string>
     <string name="loading">Loading...</string>
+    <string name="daftar_sampah">Daftar Sampah</string>
+    <string name="edit_sampah">Edit Sampah</string>
+    <string name="nama_sampah">Nama Sampah</string>
+    <string name="masukkan_nama_sampah">Masukkan Nama Sampah</string>
+    <string name="harga_sampah">Harga Sampah</string>
+    <string name="masukkan_harga_sampah">Masukkan harga sampah</string>
+    <string name="deskripsi_sampah">Deskripsi Sampah</string>
+    <string name="masukkan_deskripsi_sampah">Masukkan deskripsi sampah</string>
+    <string name="perbarui_sampah">Perbarui Sampah</string>
+    <string name="hapus_sampah">Hapus Sampah</string>
+    <string name="tambah_sampah">Tambah Sampah</string>
+    <string name="tekan_untuk_memilih_gambar">Tekan untuk memilih gambar</string>
+    <string name="tambah">Tambah</string>
+    <string name="tambah_jadwal">Tambah Jadwal</string>
+    <string name="hari">Hari</string>
+    <string name="masukkan_hari">Masukkan hari</string>
+    <string name="jenis_sampah">Jenis Sampah</string>
+    <string name="masukkan_jenis_sampah">Masukkan jenis sampah</string>
+    <string name="harga">Harga:</string>
+    <string name="keterangan">Keterangan:</string>
+    <string name="description_sampah">description sampah</string>
 </resources>
