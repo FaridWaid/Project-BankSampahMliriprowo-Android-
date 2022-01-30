@@ -20,6 +20,7 @@
         <entry key="..\:/Dev/Android_Learning/BankSampahMliriprowo/app/src/main/res/layout/activity_forgot_password.xml" value="0.2368659420289855" />
         <entry key="..\:/Dev/Android_Learning/BankSampahMliriprowo/app/src/main/res/layout/activity_home.xml" value="0.24139492753623187" />
         <entry key="..\:/Dev/Android_Learning/BankSampahMliriprowo/app/src/main/res/layout/activity_home_admin.xml" value="0.22735507246376813" />
+        <entry key="..\:/Dev/Android_Learning/BankSampahMliriprowo/app/src/main/res/layout/activity_jadwal_pengumpulan_sampah.xml" value="0.21014492753623187" />
         <entry key="..\:/Dev/Android_Learning/BankSampahMliriprowo/app/src/main/res/layout/activity_jadwal_pengumpulan_sampah_admin.xml" value="0.264" />
         <entry key="..\:/Dev/Android_Learning/BankSampahMliriprowo/app/src/main/res/layout/activity_login.xml" value="0.2" />
         <entry key="..\:/Dev/Android_Learning/BankSampahMliriprowo/app/src/main/res/layout/activity_register.xml" value="0.2" />
@@ -34,6 +35,7 @@
         <entry key="..\:/Dev/Android_Learning/BankSampahMliriprowo/app/src/main/res/layout/fragment_profile_admin.xml" value="0.24010416666666667" />
         <entry key="..\:/Dev/Android_Learning/BankSampahMliriprowo/app/src/main/res/layout/item_daftar_sampah.xml" value="0.182518115942029" />
         <entry key="..\:/Dev/Android_Learning/BankSampahMliriprowo/app/src/main/res/layout/item_jadwal_pengumpulan_sampah.xml" value="0.245018115942029" />
+        <entry key="..\:/Dev/Android_Learning/BankSampahMliriprowo/app/src/main/res/layout/item_viewpager_sampah.xml" value="0.21014492753623187" />
         <entry key="..\:/Dev/Android_Learning/BankSampahMliriprowo/app/src/main/res/layout/loading_bar.xml" value="0.12360688956433637" />
         <entry key="..\:/Dev/Android_Learning/BankSampahMliriprowo/app/src/main/res/layout/rounded_border.xml" value="0.17300724637681159" />
         <entry key="..\:/Dev/Android_Learning/BankSampahMliriprowo/app/src/main/res/layout/slide_item_container.xml" value="0.1793478260869565" />

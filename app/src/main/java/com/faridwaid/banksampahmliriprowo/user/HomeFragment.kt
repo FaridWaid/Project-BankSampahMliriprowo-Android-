@@ -1,5 +1,6 @@
 package com.faridwaid.banksampahmliriprowo.user
 
+import android.content.Intent
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.os.Handler
@@ -12,6 +13,8 @@ import android.widget.TextView
 import com.faridwaid.banksampahmliriprowo.LoadingDialog
 import com.faridwaid.banksampahmliriprowo.R
 import com.faridwaid.banksampahmliriprowo.Users
+import com.faridwaid.banksampahmliriprowo.admin.JadwalPengumpulanSampahAdminActivity
+import com.google.android.material.card.MaterialCardView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.google.firebase.storage.FirebaseStorage
@@ -77,6 +80,17 @@ class HomeFragment : Fragment() {
                 photoProfil.setImageBitmap(bitmap)
             } else {
                 photoProfil.setImageResource(R.drawable.ic_profile)
+            }
+        }
+
+        // Mendefinisikan variabel item fitur 4
+        // overridePendingTransition digunakan untuk animasi dari intent
+        val jadwalPengumpulanSampah: MaterialCardView = view.findViewById(R.id.itemFitur4)
+        jadwalPengumpulanSampah.setOnClickListener {
+            // Jika berhasil maka akan pindah ke JadwalPengumpulanSampahActivity
+            requireActivity().run{
+                startActivity(Intent(this, JadwalPengumpulanSampahActivity::class.java))
+                overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right)
             }
         }
 

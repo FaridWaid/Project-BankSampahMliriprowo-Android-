@@ -10,6 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BankSampahMliriprowo">
         <activity
+            android:name=".user.JadwalPengumpulanSampahActivity"
+            android:exported="false" />
+        <activity
             android:name=".admin.EditDaftarSampahAdminActivity"
             android:exported="false" />
         <activity

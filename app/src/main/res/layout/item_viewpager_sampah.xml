@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_margin="8dp"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?android:attr/selectableItemBackground"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="3dp"
+    app:cardBackgroundColor="@color/card_background">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="8dp">
+
+        <com.makeramen.roundedimageview.RoundedImageView
+            android:id="@+id/imageSampah"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:scaleType="centerCrop"
+            app:layout_constraintDimensionRatio="H, 2:1.6"
+            app:layout_constraintTop_toTopOf="parent"
+            app:riv_corner_radius="8dp"
+            android:src="@drawable/tempat_sampah" />
+
+
+        <TextView
+            android:id="@+id/typeSampah"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="@string/nama_sampah"
+            android:textColor="@color/primary"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintTop_toBottomOf="@id/imageSampah"/>
+
+        <TextView
+            android:id="@+id/price"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:text="@string/harga"
+            android:textColor="@color/primary_text"
+            android:textSize="11sp"
+            app:layout_constraintTop_toBottomOf="@id/typeSampah"/>
+
+        <TextView
+            android:id="@+id/priceSampah"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:text="@string/harga_sampah"
+            android:textColor="@color/secondary_text"
+            android:textSize="10sp"
+            app:layout_constraintTop_toBottomOf="@id/price"/>
+
+        <TextView
+            android:id="@+id/description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:text="@string/keterangan"
+            android:textColor="@color/primary_text"
+            android:textSize="11sp"
+            app:layout_constraintTop_toBottomOf="@id/priceSampah"/>
+
+        <TextView
+            android:id="@+id/descriptionSampah"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:text="@string/description_sampah"
+            android:textColor="@color/secondary_text"
+            android:textSize="10sp"
+            app:layout_constraintTop_toBottomOf="@id/description"/>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>

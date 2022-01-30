@@ -55,4 +55,5 @@
     <string name="harga">Harga:</string>
     <string name="keterangan">Keterangan:</string>
     <string name="description_sampah">description sampah</string>
+    <string name="jadwal_pengumpulan_sampah">Jadwal Pengumpulan Sampah</string>
 </resources>
