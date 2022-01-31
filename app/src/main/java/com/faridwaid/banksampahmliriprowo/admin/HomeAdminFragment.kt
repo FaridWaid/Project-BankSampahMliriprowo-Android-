@@ -19,6 +19,7 @@ import com.google.android.material.card.MaterialCardView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.google.firebase.storage.FirebaseStorage
+import com.squareup.picasso.Picasso
 import java.io.File
 
 class HomeAdminFragment : Fragment() {
@@ -50,27 +51,16 @@ class HomeAdminFragment : Fragment() {
         // Memanggil fungsi loadingBar dan mengeset time = 4000
         loadingBar(2000)
 
-        // Membuat variabel storage untuk inisialisasi FirebaseStorage,
-        // gsReference memiliki child dari userId,
-        // ketika dalam img terdapat id dari user, maka photo tersebut digunakan untuk photo profile
-        // jika dalam img tidak terdapat id user, maka photo profil akan diset dari drawable profile
-        val storage = FirebaseStorage.getInstance()
-        val gsReference = storage.reference.child("img/admin")
-        val localFile = File.createTempFile("tempImage", "jpg")
-        gsReference.getFile(localFile).addOnCompleteListener{
-            if (it.isSuccessful){
-                val bitmap = BitmapFactory.decodeFile(localFile.absolutePath)
-                photoProfil.setImageBitmap(bitmap)
-            } else {
-                photoProfil.setImageResource(R.drawable.ic_profile)
-            }
-        }
-
         // Mengambil data user dengan referen dan dimasukkan kedalam view (text,etc)
         val menuListener = object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 val admin = dataSnapshot.getValue(Admin::class.java)
                 textName.setText("Hello ${admin?.username}")
+                if (admin?.photoProfil == ""){
+                    photoProfil.setImageResource(R.drawable.ic_profile)
+                } else {
+                    Picasso.get().load(admin?.photoProfil).into(photoProfil)
+                }
             }
             override fun onCancelled(databaseError: DatabaseError) {
                 // handle error

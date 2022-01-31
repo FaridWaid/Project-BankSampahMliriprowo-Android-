@@ -67,7 +67,7 @@ class ProfileFragment : Fragment() {
         referen = FirebaseDatabase.getInstance().getReference("users").child("${userIdentity?.uid}")
 
         // Memanggil fungsi loadingBar dan mengeset time = 4000
-        loadingBar(4000)
+        loadingBar(1000)
 
         // Mengambil data user dengan referen dan dimasukkan kedalam view (text,etc)
         val menuListener = object : ValueEventListener {
@@ -76,29 +76,17 @@ class ProfileFragment : Fragment() {
                 textName.text = user?.username
                 textSaldo.text = user?.saldo.toString()
                 textEmail.text = user?.email
+                if (user?.photoProfil == ""){
+                    photoProfil.setImageResource(R.drawable.ic_profile)
+                } else {
+                    Picasso.get().load(user?.photoProfil).into(photoProfil)
+                }
             }
             override fun onCancelled(databaseError: DatabaseError) {
                 // handle error
             }
         }
         referen.addListenerForSingleValueEvent(menuListener)
-
-        // Membuat variabel storage untuk inisialisasi FirebaseStorage,
-        // gsReference memiliki child dari userId,
-        // ketika dalam img terdapat id dari user, maka photo tersebut digunakan untuk photo profile
-        // jika dalam img tidak terdapat id user, maka photo profil akan diset dari drawable camera
-        val storage = FirebaseStorage.getInstance()
-        val gsReference = storage.reference.child("img/${userIdentity?.uid}")
-        val localFile = File.createTempFile("tempImage", "jpg")
-        gsReference.getFile(localFile).addOnCompleteListener{
-            if (it.isSuccessful){
-                val bitmap = BitmapFactory.decodeFile(localFile.absolutePath)
-                photoProfil.setImageBitmap(bitmap)
-            } else {
-                photoProfil.setImageResource(R.drawable.camera)
-            }
-        }
-
 
         // Jika userIdentity tidak null dan email dari user sudah terverifikasi, maka icVerified akan ditampilkan,
         // jika tidak maka sebaliknya

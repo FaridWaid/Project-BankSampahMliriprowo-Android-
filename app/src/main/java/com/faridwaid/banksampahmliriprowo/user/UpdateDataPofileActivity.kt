@@ -19,6 +19,7 @@ import androidx.navigation.Navigation
 import com.faridwaid.banksampahmliriprowo.LoadingDialog
 import com.faridwaid.banksampahmliriprowo.R
 import com.faridwaid.banksampahmliriprowo.Users
+import com.faridwaid.banksampahmliriprowo.admin.DaftarSampah
 import com.faridwaid.banksampahmliriprowo.admin.HomeAdminActivity
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
@@ -45,6 +46,7 @@ class UpdateDataPofileActivity : AppCompatActivity() {
     private lateinit var textEmail: TextInputEditText
     private lateinit var emailContainer: TextInputLayout
     private lateinit var photoProfil: CircleImageView
+    private lateinit var textImage: TextView
 
     // Membuat companion object dari Image
     companion object{
@@ -66,12 +68,11 @@ class UpdateDataPofileActivity : AppCompatActivity() {
         textEmail = findViewById(R.id.yourEmail)
         emailContainer = findViewById(R.id.emailContainer)
         photoProfil = findViewById(R.id.ivProfile)
+        textImage = findViewById(R.id.textImage)
 
         // Membuat referen memiliki child userId, yang nantinya akan diisi oleh data user
         referen = FirebaseDatabase.getInstance().getReference("users").child("${userIdentity?.uid}")
 
-        // Memanggil fungsi loadingBar dan mengeset time = 4000
-        loadingBar(4000)
 
         // Mengambil data user dengan referen dan dimasukkan kedalam view (text,etc)
         val menuListener = object : ValueEventListener {
@@ -80,28 +81,16 @@ class UpdateDataPofileActivity : AppCompatActivity() {
                 textName.setText(user?.username)
                 textSaldo.text = user?.saldo.toString()
                 textEmail.setText(user?.email)
+                if (user?.photoProfil != ""){
+                    Picasso.get().load(user?.photoProfil).into(photoProfil)
+                    textImage.visibility = View.INVISIBLE
+                }
             }
             override fun onCancelled(databaseError: DatabaseError) {
                 // handle error
             }
         }
         referen.addListenerForSingleValueEvent(menuListener)
-
-        // Membuat variabel storage untuk inisialisasi FirebaseStorage,
-        // gsReference memiliki child dari userId,
-        // ketika dalam img terdapat id dari user, maka photo tersebut digunakan untuk photo profile
-        // jika dalam img tidak terdapat id user, maka photo profil akan diset dari drawable camera
-        val storage = FirebaseStorage.getInstance()
-        val gsReference = storage.reference.child("img/${userIdentity?.uid}")
-        val localFile = File.createTempFile("tempImage", "jpg")
-        gsReference.getFile(localFile).addOnCompleteListener{
-            if (it.isSuccessful){
-                val bitmap = BitmapFactory.decodeFile(localFile.absolutePath)
-                photoProfil.setImageBitmap(bitmap)
-            } else {
-                photoProfil.setImageResource(R.drawable.camera)
-            }
-        }
 
 
         // Memanggil fungsi "usernameFocusListener", "emailFocusListener"
@@ -136,18 +125,55 @@ class UpdateDataPofileActivity : AppCompatActivity() {
                 userIdentity?.let {
                     userIdentity.updateEmail(email).addOnCompleteListener {
                         if (it.isSuccessful){
-                            val menuListener = object : ValueEventListener {
-                                override fun onDataChange(dataSnapshot: DataSnapshot) {
-                                    val user = dataSnapshot.getValue(Users::class.java)
-                                    val userUpdate = Users(userIdentity?.uid!!,username, email, user?.telepon!!, user?.jumlahSetoran!!, user?.jumlahPenarikan!!, user?.saldo!!, user?.token!!)
-                                    referen.setValue(userUpdate)
+                            // Membuat variabel ref yang dihungkan dengan firebase storage
+                            // variabel ref ini digunakan untuk menyimpan foto sampah yang sudah dipilih dan dimasukkan,
+                            // ke dalam firebase storage, jika tidak memilih foto maka foto akan diset dari android resource untuk dimasukkan
+                            // ke dalam firebase storage
+                            val refImage = FirebaseStorage.getInstance().reference.child("img/${userIdentity?.uid}")
+                            if (photoProfil.drawable == null){
+                                imageUri = Uri.parse("android.resource://com.faridwaid.banksampahmliriprowo/drawable/ic_profile")
+                                val stream = contentResolver.openInputStream(imageUri)
+                                refImage.putFile(imageUri).addOnSuccessListener {
+                                    var downloadUrl: Uri? = null
+                                    refImage.downloadUrl.addOnSuccessListener { it1 ->
+                                        downloadUrl = it1
+                                        // Mengupdate child yang ada pada reference dengan inputan baru,
+                                        val menuListener = object : ValueEventListener {
+                                            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                                                val user = dataSnapshot.getValue(Users::class.java)
+                                                val userUpdate = Users(userIdentity?.uid!!,username, email, downloadUrl.toString(), user?.jumlahSetoran!!, user?.jumlahPenarikan!!, user?.saldo!!, user?.token!!)
+                                                referen.setValue(userUpdate)
+                                            }
+                                            override fun onCancelled(databaseError: DatabaseError) {
+                                                // handle error
+                                            }
+                                        }
+
+                                        referen.addListenerForSingleValueEvent(menuListener)
+                                    }
                                 }
-                                override fun onCancelled(databaseError: DatabaseError) {
-                                    // handle error
+                            } else {
+                                refImage.putFile(imageUri).addOnSuccessListener {
+                                    var downloadUrl: Uri? = null
+                                    refImage.downloadUrl.addOnSuccessListener { it1 ->
+                                        downloadUrl = it1
+                                        // Mengupdate child yang ada pada reference dengan inputan baru,
+                                        val menuListener = object : ValueEventListener {
+                                            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                                                val user = dataSnapshot.getValue(Users::class.java)
+                                                val userUpdate = Users(userIdentity?.uid!!,username, email, downloadUrl.toString(), user?.jumlahSetoran!!, user?.jumlahPenarikan!!, user?.saldo!!, user?.token!!)
+                                                referen.setValue(userUpdate)
+                                            }
+                                            override fun onCancelled(databaseError: DatabaseError) {
+                                                // handle error
+                                            }
+                                        }
+
+                                        referen.addListenerForSingleValueEvent(menuListener)
+                                    }
                                 }
                             }
 
-                            referen.addListenerForSingleValueEvent(menuListener)
                             alertDialog("Konfirmasi!", "Data pribadi anda berhasil diubah!", true)
                         } else{
                             alertDialog("Gagal Mengubah Data Pribadi!", "${it.exception?.message}", false)
@@ -224,8 +250,7 @@ class UpdateDataPofileActivity : AppCompatActivity() {
         if (requestCode == IMAGE_REQUEST_CODE && resultCode == RESULT_OK){
             photoProfil.setImageURI(data?.data)
             imageUri = Uri.parse("${data?.data}")
-            val ref = FirebaseStorage.getInstance().reference.child("img/${FirebaseAuth.getInstance().currentUser?.uid}")
-            ref.putFile(imageUri)
+            textImage.visibility = View.INVISIBLE
         }
     }
 

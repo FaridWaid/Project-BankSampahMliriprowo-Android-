@@ -5,8 +5,9 @@ data class Admin(
     val username : String,
     val email : String,
     val password : String,
+    val photoProfil : String
 ){
-    constructor(): this("","", ""){
+    constructor(): this("","", "", ""){
 
     }
 }

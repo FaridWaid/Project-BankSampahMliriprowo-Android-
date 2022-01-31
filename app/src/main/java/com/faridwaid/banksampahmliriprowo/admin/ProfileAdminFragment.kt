@@ -13,16 +13,19 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.faridwaid.banksampahmliriprowo.LoadingDialog
 import com.faridwaid.banksampahmliriprowo.LoginActivity
 import com.faridwaid.banksampahmliriprowo.R
+import com.faridwaid.banksampahmliriprowo.Users
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.google.firebase.storage.FirebaseStorage
+import com.squareup.picasso.Picasso
 import java.io.File
 
 class ProfileAdminFragment : Fragment() {
@@ -33,12 +36,10 @@ class ProfileAdminFragment : Fragment() {
     private lateinit var imageUri: Uri
     // Mendefinisikan variabel global dari view
     private lateinit var photoProfil: ImageView
+    private lateinit var textImage: TextView
     private lateinit var etUsername: TextInputEditText
-    private lateinit var usernameContainer: TextInputLayout
     private lateinit var etEmail: TextInputEditText
-    private lateinit var emailContainer: TextInputLayout
     private lateinit var etPassword: TextInputEditText
-    private lateinit var passwordContainer: TextInputLayout
 
     // Membuat companion object dari Image
     companion object{
@@ -61,6 +62,7 @@ class ProfileAdminFragment : Fragment() {
 
         // Mendefinisikan variabel edit text yang nantinya akan berisi inputan user
         photoProfil = view.findViewById(R.id.ivProfile)
+        textImage = view.findViewById(R.id.textImage)
         etUsername = view.findViewById(R.id.etUsername)
         etEmail = view.findViewById(R.id.etEmail)
         etPassword = view.findViewById(R.id.etPassword)
@@ -78,33 +80,16 @@ class ProfileAdminFragment : Fragment() {
                 etUsername.setText("${admin?.username}")
                 etEmail.setText("${admin?.email}")
                 etPassword.setText("${admin?.password}")
+                if (admin?.photoProfil != ""){
+                    Picasso.get().load(admin?.photoProfil).into(photoProfil)
+                    textImage.visibility = View.INVISIBLE
+                }
             }
             override fun onCancelled(databaseError: DatabaseError) {
                 // handle error
             }
         }
         referen.addListenerForSingleValueEvent(menuListener)
-
-        // Membuat variabel storage untuk inisialisasi FirebaseStorage,
-        // gsReference memiliki child dari userId,
-        // ketika dalam img terdapat id dari user, maka photo tersebut digunakan untuk photo profile
-        // jika dalam img tidak terdapat id user, maka photo profil akan diset dari drawable camera
-        val storage = FirebaseStorage.getInstance()
-        val gsReference = storage.reference.child("img/admin")
-        val localFile = File.createTempFile("tempImage", "jpg")
-        gsReference.getFile(localFile).addOnCompleteListener{
-            if (it.isSuccessful){
-                val bitmap = BitmapFactory.decodeFile(localFile.absolutePath)
-                photoProfil.setImageBitmap(bitmap)
-            } else {
-                photoProfil.setImageResource(R.drawable.ic_profile)
-            }
-        }
-
-        // Memanggil fungsi "usernameFocusListener", "emailFocusListener", "passwordFocusListener"
-//        usernameFocusListener()
-//        emailFocusListener()
-//        passwordFocusListener()
 
         // Ketika "photoProfil" di klik, maka akan menjalankan fungsi pickImageGallery()
         photoProfil.setOnClickListener {
@@ -156,24 +141,68 @@ class ProfileAdminFragment : Fragment() {
                 return@setOnClickListener
             }
 
-            // Jika semua sudah diisi maka akan masuk ke dalam kondisi untuk update email dari user,
-            // kemudian mengupdate database referen dengan id dari idUser,
-            // jika berhasil maka akan mnemapilkan alert dialog berhasil,
-            // dan jika gagal maka akan mnemapilkan alert dialog gagal
+            // Membuat variabel refImage yang dihungkan dengan firebase storage
+            // variabel refImage ini digunakan untuk menyimpan foto profil yang sudah dipilih dan dimasukkan,
+            // ke dalam firebase storage, jika tidak memilih foto maka foto akan diset dari android resource untuk dimasukkan
+            // ke dalam firebase storage
+            val refImage = FirebaseStorage.getInstance().reference.child("img/admin")
+            if (photoProfil.drawable == null){
+                imageUri = Uri.parse("android.resource://com.faridwaid.banksampahmliriprowo/drawable/ic_profile")
+//                val stream = contentResolver.openInputStream(imageUri)
+                refImage.putFile(imageUri).addOnSuccessListener {
+                    var downloadUrl: Uri? = null
+                    refImage.downloadUrl.addOnSuccessListener { it1 ->
+                        downloadUrl = it1
+                        // Mengupdate child yang ada pada reference dengan inputan baru,
+                        val menuListener = object : ValueEventListener {
+                            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                                val user = dataSnapshot.getValue(Users::class.java)
+                                val adminUpdate = Admin(username, email, password, downloadUrl.toString())
+                                referen.setValue(adminUpdate).addOnCompleteListener {
+                                    // Memanggil fungsi loadingBar dan mengeset time = 4000
+                                    loadingBar(1000)
+                                    if (it.isSuccessful){
+                                        alertDialog("Konfirmasi!", "Data pribadi anda berhasil diubah!")
+                                    } else {
+                                        alertDialog("Gagal!", "Gagal Melakukan Perubahan Data Pribadi!")
+                                    }
+                                }
+                            }
+                            override fun onCancelled(databaseError: DatabaseError) {
+                                // handle error
+                            }
+                        }
 
-                val adminUpdate = Admin(username, email, password)
-                referen.setValue(adminUpdate).addOnCompleteListener {
-                    if (it.isSuccessful){
-                        // Jika gagal maka akan memunculkan dialog berhasil
-                        alertDialog("Konfirmasi!", "Data pribadi anda berhasil diubah!")
-                    } else{
-                        // Jika gagal maka akan memunculkan toast gagal
-                        alertDialog("Gagal!", "Gagal Melakukan Perubahan Data Pribadi!")
-
+                        referen.addListenerForSingleValueEvent(menuListener)
                     }
+                }
+            } else {
+                refImage.putFile(imageUri).addOnSuccessListener {
+                    var downloadUrl: Uri? = null
+                    refImage.downloadUrl.addOnSuccessListener { it1 ->
+                        downloadUrl = it1
+                        // Mengupdate child yang ada pada reference dengan inputan baru,
+                        val menuListener = object : ValueEventListener {
+                            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                                val user = dataSnapshot.getValue(Users::class.java)
+                                val adminUpdate = Admin(username, email, password, downloadUrl.toString())
+                                referen.setValue(adminUpdate).addOnCompleteListener {
+                                    if (it.isSuccessful){
+                                        alertDialog("Konfirmasi!", "Data pribadi anda berhasil diubah!")
+                                    } else {
+                                        alertDialog("Gagal!", "Gagal Melakukan Perubahan Data Pribadi!")
+                                    }
+                                }
+                            }
+                            override fun onCancelled(databaseError: DatabaseError) {
+                                // handle error
+                            }
+                        }
 
+                        referen.addListenerForSingleValueEvent(menuListener)
+                    }
+                }
             }
-
         }
 
         // Membuat variabel "btnLogout" yang berisi view dengan id "btnLogout",
@@ -238,8 +267,7 @@ class ProfileAdminFragment : Fragment() {
         if (requestCode == IMAGE_REQUEST_CODE && resultCode == AppCompatActivity.RESULT_OK){
             photoProfil.setImageURI(data?.data)
             imageUri = Uri.parse("${data?.data}")
-            val ref = FirebaseStorage.getInstance().reference.child("img/admin")
-            ref.putFile(imageUri)
+            textImage.visibility = View.INVISIBLE
         }
     }
 

@@ -5,7 +5,7 @@ data class Users(
     val id : String,
     val username : String,
     val email : String,
-    val telepon : String,
+    val photoProfil : String,
     val jumlahSetoran : Int,
     val jumlahPenarikan : Int,
     val saldo : Int,
