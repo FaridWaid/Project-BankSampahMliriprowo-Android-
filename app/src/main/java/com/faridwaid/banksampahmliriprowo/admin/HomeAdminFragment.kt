@@ -46,7 +46,7 @@ class HomeAdminFragment : Fragment() {
         photoProfil = view.findViewById(R.id.profilePicture)
 
         // Membuat referen memiliki child userId, yang nantinya akan diisi oleh data user
-        referen = FirebaseDatabase.getInstance().getReference("users").child("admin")
+        referen = FirebaseDatabase.getInstance().getReference("admins").child("admin")
 
         // Memanggil fungsi loadingBar dan mengeset time = 4000
         loadingBar(2000)

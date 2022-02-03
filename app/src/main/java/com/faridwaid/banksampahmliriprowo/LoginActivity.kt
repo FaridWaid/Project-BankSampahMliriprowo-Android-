@@ -54,7 +54,7 @@ class LoginActivity : AppCompatActivity() {
         auth = FirebaseAuth.getInstance()
 
         // Mendefinisikan variabel referen yang akan digunakan untuk mengedintifikasi admin/user
-        referen = FirebaseDatabase.getInstance().getReference("users").child("admin")
+        referen = FirebaseDatabase.getInstance().getReference("admins").child("admin")
 
         // Mengambil data user dengan referen dan dimasukkan kedalam view (text,etc)
         val menuListener = object : ValueEventListener {

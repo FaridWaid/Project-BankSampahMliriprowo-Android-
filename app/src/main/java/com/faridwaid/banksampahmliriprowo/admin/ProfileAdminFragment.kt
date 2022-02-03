@@ -68,7 +68,7 @@ class ProfileAdminFragment : Fragment() {
         etPassword = view.findViewById(R.id.etPassword)
 
         // Membuat referen memiliki child userId, yang nantinya akan diisi oleh data user
-        referen = FirebaseDatabase.getInstance().getReference("users").child("admin")
+        referen = FirebaseDatabase.getInstance().getReference("admins").child("admin")
 
         // Memanggil fungsi loadingBar dan mengeset time = 4000
         loadingBar(2000)
@@ -187,6 +187,7 @@ class ProfileAdminFragment : Fragment() {
                                 val user = dataSnapshot.getValue(Users::class.java)
                                 val adminUpdate = Admin(username, email, password, downloadUrl.toString())
                                 referen.setValue(adminUpdate).addOnCompleteListener {
+                                    loadingBar(3000)
                                     if (it.isSuccessful){
                                         alertDialog("Konfirmasi!", "Data pribadi anda berhasil diubah!")
                                     } else {
