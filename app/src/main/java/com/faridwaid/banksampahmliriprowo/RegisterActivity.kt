@@ -2,6 +2,7 @@ package com.faridwaid.banksampahmliriprowo
 
 import android.content.DialogInterface
 import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
@@ -14,14 +15,15 @@ import com.faridwaid.banksampahmliriprowo.user.HomeActivity
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.*
+import com.google.firebase.storage.FirebaseStorage
 
 class RegisterActivity : AppCompatActivity() {
 
     // Mendefinisikan variabel global untuk connect ke Firebase
     private lateinit var auth: FirebaseAuth
     private lateinit var ref: DatabaseReference
+    private lateinit var imageUri: Uri
     // Mendefinisikan variabel global dari view
     private lateinit var etUsername: TextInputEditText
     private lateinit var usernameContainer: TextInputLayout
@@ -86,10 +88,10 @@ class RegisterActivity : AppCompatActivity() {
 
             // Jika semua sudah diisi maka akan melakukan "createNewUser"
             if (validEmail && validPassword && validUsername) {
-                loadingBar(1000)
                 // Memanggil fungsi "createNewUser" dengan membawa variabel ("username","email","password"),
                 // Fungsi ini digunakan untuk membuat user baru
                 createNewUser(username, email, password)
+                loadingBar(6000)
             }else {
                 loadingBar(1000)
                 alertDialog("Gagal membuat akun!", "Pastikan anda menginputkan nama, email, dan password dengan benar!", false)
@@ -144,24 +146,34 @@ class RegisterActivity : AppCompatActivity() {
                 if (it.isSuccessful){
                     // Membuat variabel "idUser" yang berisikan id dari user baru yang telah berhasil dibuat
                     val idUser = auth.currentUser?.uid
-                    // Membuat variabel "newUser" yang berisikan beberapa data dan data tersebut diinputkan ke dalam Users
-                    val newUser = Users(idUser!!, username, email, "", 0, 0, 0, "")
-
-                    // Jika idUser tidak null/kosong
-                    if (idUser != null){
-                        // Membuat suatu child realtime database baru dengan child = "idUser",
-                        // dan valuenya berisi data yang ada di dalam "newUser"
-                        ref.child(idUser).setValue(newUser).addOnCompleteListener {
-                            // Jika berhasil menambahkan child baru ke realtime database, maka akan memunculkan toast,
-                            // Kemudian pindah activity ke activity LoginActivity
-                            Intent(this@RegisterActivity, LoginActivity::class.java).also { intent ->
-                                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                                startActivity(intent)
+                    // Membuat variabel refImage yang dihungkan dengan firebase storage
+                    // variabel refImage ini digunakan untuk menyimpan foto imageUri dimasukkan,
+                    // ke dalam firebase storage
+                    imageUri = Uri.parse("android.resource://com.faridwaid.banksampahmliriprowo/drawable/ic_profile")
+                    val refImage = FirebaseStorage.getInstance().reference.child("img/${idUser}")
+                    refImage.putFile(imageUri).addOnSuccessListener {
+                        var downloadUrl: Uri? = null
+                        refImage.downloadUrl.addOnSuccessListener { it1 ->
+                            downloadUrl = it1
+                            // Membuat variabel "newUser" yang berisikan beberapa data dan data tersebut diinputkan ke dalam Users
+                            val newUser = Users(idUser!!, username, email, downloadUrl.toString(), 0, 0, 0, "")
+                            // Jika idUser tidak null/kosong
+                            if (idUser != null){
+                                // Membuat suatu child realtime database baru dengan child = "idUser",
+                                // dan valuenya berisi data yang ada di dalam "newUser"
+                                ref.child(idUser).setValue(newUser).addOnCompleteListener {
+                                    // Jika berhasil menambahkan child baru ke realtime database, maka akan memunculkan toast,
+                                    // Kemudian pindah activity ke activity LoginActivity
+                                    Intent(this@RegisterActivity, LoginActivity::class.java).also { intent ->
+                                        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                                        startActivity(intent)
+                                    }
+                                }
+                            } else {
+                                // Jika gagal menambahkan child baru ke realtime database, maka akan memunculkan toast gagal
+                                alertDialog("Gagal membuat akun!", "Pastikan anda menginputkan nama, email, dan password dengan benar!", false)
                             }
                         }
-                    } else {
-                        // Jika gagal menambahkan child baru ke realtime database, maka akan memunculkan toast gagal
-                        alertDialog("Gagal membuat akun!", "Pastikan anda menginputkan nama, email, dan password dengan benar!", false)
                     }
                 } else{
                     // Jika gagal membuat akun baru, maka akan memunculkan toast error
