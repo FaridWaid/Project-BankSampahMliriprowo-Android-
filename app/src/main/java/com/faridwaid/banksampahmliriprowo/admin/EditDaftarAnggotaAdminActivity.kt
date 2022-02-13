@@ -142,7 +142,7 @@ class EditDaftarAnggotaAdminActivity : AppCompatActivity() {
                     override fun onDataChange(dataSnapshot: DataSnapshot) {
                         val users = dataSnapshot.getValue(Users::class.java)
                         // Mengupdate child yang ada pada reference dengan inputan baru,
-                        val usersUpdate = Users(idUser!!, usernameInput, emailInput, users?.photoProfil!!, jumlahSetoranInput.toInt(), jumlahPenarikanInput.toInt(), jumlahSaldoInput.toInt(), users?.token!!)
+                        val usersUpdate = Users(idUser!!, usernameInput, emailInput, users?.photoProfil!!, jumlahSetoranInput.toInt(), jumlahPenarikanInput.toInt(), jumlahSaldoInput.toLong(), users?.token!!)
                         reference.setValue(usersUpdate)
                     }
                     override fun onCancelled(databaseError: DatabaseError) {

@@ -79,17 +79,6 @@ class HomeAdminFragment : Fragment() {
             }
         }
 
-        // Mendefinisikan variabel item fitur 7
-        // overridePendingTransition digunakan untuk animasi dari intent
-        val jadwalPengumpulanSampah: MaterialCardView = view.findViewById(R.id.itemFitur7)
-        jadwalPengumpulanSampah.setOnClickListener {
-            // Jika berhasil maka akan pindah ke JadwalPengumpulanSampahAdminActivity
-            requireActivity().run{
-                startActivity(Intent(this, JadwalPengumpulanSampahAdminActivity::class.java))
-                overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right)
-            }
-        }
-
         // Mendefinisikan variabel item fitur 2
         // overridePendingTransition digunakan untuk animasi dari intent
         val daftarSampah: MaterialCardView = view.findViewById(R.id.itemFitur2)
@@ -97,6 +86,28 @@ class HomeAdminFragment : Fragment() {
             // Jika berhasil maka akan pindah ke DaftarSampahAdminActivity
             requireActivity().run{
                 startActivity(Intent(this, DaftarSampahAdminActivity::class.java))
+                overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right)
+            }
+        }
+
+        // Mendefinisikan variabel item fitur 3
+        // overridePendingTransition digunakan untuk animasi dari intent
+        val daftarPengumpulanSampah: MaterialCardView = view.findViewById(R.id.itemFitur3)
+        daftarPengumpulanSampah.setOnClickListener {
+            // Jika berhasil maka akan pindah ke DaftarSampahAdminActivity
+            requireActivity().run{
+                startActivity(Intent(this, DaftarPengumpulanSampahAdminActivity::class.java))
+                overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right)
+            }
+        }
+
+        // Mendefinisikan variabel item fitur 7
+        // overridePendingTransition digunakan untuk animasi dari intent
+        val jadwalPengumpulanSampah: MaterialCardView = view.findViewById(R.id.itemFitur7)
+        jadwalPengumpulanSampah.setOnClickListener {
+            // Jika berhasil maka akan pindah ke JadwalPengumpulanSampahAdminActivity
+            requireActivity().run{
+                startActivity(Intent(this, JadwalPengumpulanSampahAdminActivity::class.java))
                 overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right)
             }
         }

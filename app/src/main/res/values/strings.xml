@@ -56,4 +56,24 @@
     <string name="keterangan">Keterangan:</string>
     <string name="description_sampah">description sampah</string>
     <string name="jadwal_pengumpulan_sampah">Jadwal Pengumpulan Sampah</string>
+    <string name="custominput">customInput</string>
+    <string name="daftar_pengumpulan_sampah">Daftar Pengumpulan Sampah</string>
+    <string name="search">Search</string>
+    <string name="edit_pengumpulan_sampah">Edit Pengumpulan Sampah</string>
+    <string name="anggota">Anggota</string>
+    <string name="sampah">Sampah</string>
+    <string name="pilih_sampah">Pilih sampah</string>
+    <string name="tanggal_setoran">Tanggal Setoran</string>
+    <string name="hari_bulan_tahun">hari/bulan/tahun</string>
+    <string name="pilih_tanggal">Pilih tanggal</string>
+    <string name="berat_pengumpulan">Berat Pengumpulan</string>
+    <string name="perbarui_pengumpulan">Perbarui Pengumpulan</string>
+    <string name="hapus_pengumpulan">Hapus Pengumpulan</string>
+    <string name="pilih_anggota">Pilih anggota</string>
+    <string name="masukkan_berat_pengumpulan">Masukkan berat pengumpulan</string>
+    <string name="text_user">text user</string>
+    <string name="type_sampah">Type sampah</string>
+    <string name="price_sampah">Price sampah</string>
+    <string name="total_price">Total price</string>
+    <string name="tanggal_pengumpulan">tanggal pengumpulan</string>
 </resources>

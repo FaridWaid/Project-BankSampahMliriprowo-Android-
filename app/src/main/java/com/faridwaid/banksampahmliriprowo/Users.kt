@@ -8,7 +8,7 @@ data class Users(
     val photoProfil : String,
     val jumlahSetoran : Int,
     val jumlahPenarikan : Int,
-    val saldo : Int,
+    val saldo : Long,
     val token : String
 ){
     constructor(): this("","", "", "", 0, 0, 0, ""){
