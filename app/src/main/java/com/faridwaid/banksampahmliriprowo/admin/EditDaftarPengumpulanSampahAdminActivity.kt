@@ -23,6 +23,7 @@ class EditDaftarPengumpulanSampahAdminActivity : AppCompatActivity() {
     // Mendefinisikan variabel global untuk connect ke Firebase
     private lateinit var referencePengumpulan: DatabaseReference
     private lateinit var referenceAnggota: DatabaseReference
+    private lateinit var referenceSampah: DatabaseReference
     // Mendefinisikan variabel global dari view
     private lateinit var autoComplete: AutoCompleteTextView
     private lateinit var autoCompleteSampah: AutoCompleteTextView
@@ -30,10 +31,13 @@ class EditDaftarPengumpulanSampahAdminActivity : AppCompatActivity() {
     private lateinit var textDate: TextView
     private lateinit var updateButton: Button
     private lateinit var updateDate: String
+    private var tempWeight by Delegates.notNull<Int>()
+    private var currentWeight by Delegates.notNull<Int>()
     private var currentTotal by Delegates.notNull<Long>()
     private var totalPrice by Delegates.notNull<Long>()
     private var deleteTotal by Delegates.notNull<Long>()
     private lateinit var deleteIdAnggota: String
+    private lateinit var deleteIdSampah: String
     private var changeDate by Delegates.notNull<Boolean>()
 
     // Mendefinisikan companion object yang akan digunakan untuk menerima data
@@ -54,21 +58,26 @@ class EditDaftarPengumpulanSampahAdminActivity : AppCompatActivity() {
         etWeight = findViewById(R.id.etWeight)
         textDate = findViewById(R.id.date)
         updateButton = findViewById(R.id.btnUpdate)
+        tempWeight = 0
         totalPrice = 0
         deleteTotal = 0
         currentTotal = 0
         changeDate = false
         deleteIdAnggota = ""
+        deleteIdSampah = ""
 
         // Membuat reference yang nantinya akan digunakan untuk melakukan aksi ke database
         referencePengumpulan = FirebaseDatabase.getInstance().getReference("daftarpengumpulan").child("$idPengumpulan")
         referenceAnggota = FirebaseDatabase.getInstance().getReference("users")
+        referenceSampah = FirebaseDatabase.getInstance().getReference("daftarsampah")
 
         // Mengambil data pengumpulan dengan referencePengumpulan dan dimasukkan kedalam view (text,etc)
         val menuListener = object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 val pengumpulan = dataSnapshot.getValue(PengumpulanAnggota::class.java)
                 etWeight.setText(pengumpulan?.weightSampah.toString())
+                tempWeight = pengumpulan?.weightSampah!!
+                deleteIdSampah = pengumpulan?.idSampah
                 autoCompleteSampah.setText(pengumpulan?.idSampah)
                 textDate.setText(pengumpulan?.datePengumpulan)
                 val referenceAnggota = FirebaseDatabase.getInstance().getReference("users").child(pengumpulan?.idAnggota!!)
@@ -166,15 +175,36 @@ class EditDaftarPengumpulanSampahAdminActivity : AppCompatActivity() {
                                                 val userUpdate = Users(users.id, users.username, users.email, users.photoProfil, users.jumlahSetoran, users.jumlahPenarikan, users.saldo - currentTotal, users.token )
                                                 referenceAnggota.child(users.id).setValue(userUpdate)
                                             }
-                                            alertDialog("Konfirmasi!", "Perubahan daftar pengumpulan sampah anggota berhasil!", true)
                                         }
 
                                         override fun onCancelled(error: DatabaseError) {
-                                            alertDialog("Konfirmasi!", "Perubahan daftar pengumpulan sampah anggota gagal!", true)
                                         }
 
 
                                     })
+                                    referenceSampah.child(pengumpulan.idSampah).addListenerForSingleValueEvent(object : ValueEventListener{
+                                        override fun onDataChange(snapshot: DataSnapshot) {
+                                            val sampah = snapshot.getValue(DaftarSampah::class.java)!!
+                                            if (tempWeight > weightInput.toInt()){
+                                                currentWeight = tempWeight - weightInput.toInt()
+                                                val stockUpdate = DaftarSampah(pengumpulan.idSampah, sampah.priceSampah, sampah.descriptionSampah, sampah.stockSampah - currentWeight, sampah.photoSampah )
+                                                referenceSampah.child(pengumpulan.idSampah).setValue(stockUpdate)
+                                            } else {
+                                                currentWeight = weightInput.toInt() - tempWeight
+                                                val stockUpdate = DaftarSampah(pengumpulan.idSampah, sampah.priceSampah, sampah.descriptionSampah, sampah.stockSampah + currentWeight, sampah.photoSampah )
+                                                referenceSampah.child(pengumpulan.idSampah).setValue(stockUpdate)
+                                            }
+                                        }
+
+                                        override fun onCancelled(error: DatabaseError) {
+                                            TODO("Not yet implemented")
+                                        }
+
+                                    })
+                                alertDialog("Konfirmasi!", "Perubahan daftar pengumpulan sampah anggota berhasil!", true)
+                            }
+                            else{
+                                alertDialog("Konfirmasi!", "Perubahan daftar pengumpulan sampah anggota gagal!", true)
                             }
                         }
                     }
@@ -219,11 +249,24 @@ class EditDaftarPengumpulanSampahAdminActivity : AppCompatActivity() {
                                 val tempTotal = users.saldo - deleteTotal
                                 val userUpdate = Users(users.id, users.username, users.email, users.photoProfil, users.jumlahSetoran - 1, users.jumlahPenarikan, tempTotal, users.token )
                                 referenceAnggota.child(deleteIdAnggota).setValue(userUpdate).addOnCompleteListener {
-                                    if (it.isSuccessful){
-                                        alertDialog("Konfirmasi!", "Pengumpulan dengan ID: ${idPengumpulan} berhasil dihapus!", true)
-                                    } else {
-                                        alertDialog("Gagal!", "Gagal mengahapus Pengumpulan dengan ID: ${idPengumpulan}!", false)
-                                    }
+                                    referenceSampah.child(deleteIdSampah).addListenerForSingleValueEvent(object : ValueEventListener{
+                                        override fun onDataChange(snapshot: DataSnapshot) {
+                                            val sampah = snapshot.getValue(DaftarSampah::class.java)!!
+                                            val stockUpdate = DaftarSampah(deleteIdSampah, sampah.priceSampah, sampah.descriptionSampah, sampah.stockSampah - tempWeight, sampah.photoSampah )
+                                            referenceSampah.child(deleteIdSampah).setValue(stockUpdate).addOnCompleteListener {
+                                                if (it.isSuccessful){
+                                                    alertDialog("Konfirmasi!", "Pengumpulan dengan ID: ${idPengumpulan} berhasil dihapus!", true)
+                                                } else {
+                                                    alertDialog("Gagal!", "Gagal mengahapus Pengumpulan dengan ID: ${idPengumpulan}!", false)
+                                                }
+                                            }
+                                        }
+
+                                        override fun onCancelled(error: DatabaseError) {
+                                            TODO("Not yet implemented")
+                                        }
+
+                                    })
                                 }
                             }
 

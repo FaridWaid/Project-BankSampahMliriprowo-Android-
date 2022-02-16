@@ -199,10 +199,26 @@ class TambahDaftarPengumpulanSampahAdminActivity : AppCompatActivity() {
                             totalPrice = tempTotal
                             val pengumpulanUpdate = PengumpulanAnggota(idPengumpulan, updateDate, users?.id, dropDownSampahInput, weightInput.toInt(), priceSampah.toString(), totalPrice.toString() )
                             refPengumpulan.child("$idPengumpulan").setValue(pengumpulanUpdate).addOnCompleteListener {
-                                if (it.isSuccessful){
-                                    val userUpdate = Users(users.id, users.username, users.email, users.photoProfil, users.jumlahSetoran + 1, users.jumlahPenarikan, users.saldo + totalPrice, users.token )
-                                    referenceAnggota.child(users.id).setValue(userUpdate)
-                                    alertDialog("Konfirmasi!", "Penambahan daftar pengumpulan sampah anggota berhasil!", true)
+                                val userUpdate = Users(users.id, users.username, users.email, users.photoProfil, users.jumlahSetoran + 1, users.jumlahPenarikan, users.saldo + totalPrice, users.token )
+                                referenceAnggota.child(users.id).setValue(userUpdate).addOnCompleteListener {
+                                    val refStockSampah = FirebaseDatabase.getInstance().getReference("daftarsampah").child(dropDownSampahInput)
+                                    refStockSampah.addListenerForSingleValueEvent(object : ValueEventListener{
+                                        override fun onDataChange(snapshot: DataSnapshot) {
+                                            val sampah = snapshot.getValue(DaftarSampah::class.java)!!
+                                            val stockUpdate = DaftarSampah(dropDownSampahInput, sampah.priceSampah, sampah.descriptionSampah, sampah.stockSampah + weightInput.toInt(), sampah.photoSampah )
+                                            refStockSampah.setValue(stockUpdate).addOnCompleteListener {
+                                                if (it.isSuccessful){
+                                                    alertDialog("Konfirmasi!", "Penambahan daftar pengumpulan sampah anggota berhasil!", true)
+                                                }
+                                            }
+                                        }
+
+                                        override fun onCancelled(error: DatabaseError) {
+                                            TODO("Not yet implemented")
+                                        }
+
+                                    })
+
                                 }
                             }
                         }

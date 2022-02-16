@@ -24,6 +24,8 @@ class EditDaftarSampahAdminActivity : AppCompatActivity() {
     private lateinit var etNameSampah: EditText
     private lateinit var etPriceSampah: EditText
     private lateinit var etDescriptionSampah: EditText
+    private lateinit var etStockSampah: EditText
+    private lateinit var stockSampah: String
     private lateinit var imageSampah: RoundedImageView
     private lateinit var updateButton: Button
     private lateinit var deleteButton: Button
@@ -48,10 +50,14 @@ class EditDaftarSampahAdminActivity : AppCompatActivity() {
         // set value untuk updateImage
         updateImage = false
 
+        // set value untuk stockSampah
+        stockSampah = ""
+
         // Mendefinisikan variabel edit text yang nantinya akan berisi inputan user
         etNameSampah = findViewById(R.id.etNameSampah)
         etPriceSampah = findViewById(R.id.etPriceSampah)
         etDescriptionSampah = findViewById(R.id.etDesctiptionSampah)
+        etStockSampah = findViewById(R.id.etStockSampah)
         imageSampah = findViewById(R.id.imageSampah)
         updateButton = findViewById(R.id.btnUpdate)
         deleteButton = findViewById(R.id.btnDelete)
@@ -66,6 +72,8 @@ class EditDaftarSampahAdminActivity : AppCompatActivity() {
                 etNameSampah.setText(sampah?.nameSampah)
                 etPriceSampah.setText(sampah?.priceSampah)
                 etDescriptionSampah.setText(sampah?.descriptionSampah)
+                etStockSampah.setText(sampah?.stockSampah.toString())
+                stockSampah = sampah?.stockSampah.toString()
                 Picasso.get().load(sampah?.photoSampah).into(imageSampah)
             }
             override fun onCancelled(databaseError: DatabaseError) {
@@ -129,7 +137,7 @@ class EditDaftarSampahAdminActivity : AppCompatActivity() {
                     ref.downloadUrl.addOnSuccessListener { it1 ->
                         downloadUrl = it1
                         // Mengupdate child yang ada pada reference dengan inputan baru,
-                        val sampahUpdate = DaftarSampah(nameSampahInput, priceSampahInput, descriptionSampahInput, downloadUrl.toString())
+                        val sampahUpdate = DaftarSampah(nameSampahInput, priceSampahInput, descriptionSampahInput, stockSampah.toInt(), downloadUrl.toString())
                         reference.setValue(sampahUpdate)
                     }
                 } else {
@@ -138,7 +146,7 @@ class EditDaftarSampahAdminActivity : AppCompatActivity() {
                         ref.downloadUrl.addOnSuccessListener { it1 ->
                             downloadUrl = it1
                             // Mengupdate child yang ada pada reference dengan inputan baru,
-                            val sampahUpdate = DaftarSampah(nameSampahInput, priceSampahInput, descriptionSampahInput, downloadUrl.toString())
+                            val sampahUpdate = DaftarSampah(nameSampahInput, priceSampahInput, descriptionSampahInput, stockSampah.toInt(), downloadUrl.toString())
                             reference.setValue(sampahUpdate)
                         }
                     }

@@ -76,4 +76,5 @@
     <string name="price_sampah">Price sampah</string>
     <string name="total_price">Total price</string>
     <string name="tanggal_pengumpulan">tanggal pengumpulan</string>
+    <string name="stock_sampah">Stock Sampah</string>
 </resources>

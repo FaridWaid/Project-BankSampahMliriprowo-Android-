@@ -24,12 +24,14 @@ class DaftarSampahAdapter(val list: ArrayList<DaftarSampah>, val method: DaftarS
         val typeSampah: TextView = itemView.findViewById(R.id.typeSampah)
         val priceSampah: TextView = itemView.findViewById(R.id.priceSampah)
         val descriptionSampah: TextView = itemView.findViewById(R.id.descriptionSampah)
+        val stockSampah: TextView = itemView.findViewById(R.id.stockSampah)
         val imageSampah: RoundedImageView = itemView.findViewById(R.id.imageSampah)
         fun bind(sampah: DaftarSampah){
             with(itemView){
                 typeSampah.text = sampah.nameSampah.toUpperCase()
                 priceSampah.text = "Rp. ${sampah.priceSampah} / KG"
                 descriptionSampah.text = "${sampah.descriptionSampah}"
+                stockSampah.text = "${sampah.stockSampah}"
                 Picasso.get().load(sampah.photoSampah).into(imageSampah)
                 itemView.setOnClickListener {
                     val moveIntent = Intent(itemView.context, EditDaftarSampahAdminActivity::class.java)

@@ -134,7 +134,7 @@ class TambahDaftarSampahAdminActivity : AppCompatActivity() {
                         FirebaseStorage.getInstance().reference.child("imgSampah/${nameSampahInput}").downloadUrl.addOnSuccessListener { it1 ->
                                 downloadUrl = it1
                                 // Mengupdate child yang ada pada reference dengan inputan baru,
-                                val sampahUpdate = DaftarSampah(nameSampahInput, priceSampahInput, descriptionSampahInput, downloadUrl.toString())
+                                val sampahUpdate = DaftarSampah(nameSampahInput, priceSampahInput, descriptionSampahInput, 0, downloadUrl.toString())
                                 reference.child("$nameSampahInput").setValue(sampahUpdate)
                             }
                     }
@@ -144,7 +144,7 @@ class TambahDaftarSampahAdminActivity : AppCompatActivity() {
                         FirebaseStorage.getInstance().reference.child("imgSampah/${nameSampahInput}").downloadUrl.addOnSuccessListener { it1 ->
                             downloadUrl = it1
                             // Mengupdate child yang ada pada reference dengan inputan baru,
-                            val sampahUpdate = DaftarSampah(nameSampahInput, priceSampahInput, descriptionSampahInput, downloadUrl.toString())
+                            val sampahUpdate = DaftarSampah(nameSampahInput, priceSampahInput, descriptionSampahInput, 0, downloadUrl.toString())
                             reference.child("$nameSampahInput").setValue(sampahUpdate)
                         }
                     }
