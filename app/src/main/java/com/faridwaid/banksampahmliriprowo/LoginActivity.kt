@@ -36,7 +36,6 @@ class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
-
         // Mendefinisikan variabel yang digunukan untuk beralih ke activity RegisterActivity
         val toRegister: TextView = findViewById(R.id.toRegister)
         // Ketika variabel "toRegister" diklik maka akan beralih ke RegisterActivity
