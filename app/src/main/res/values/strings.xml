@@ -77,4 +77,12 @@
     <string name="total_price">Total price</string>
     <string name="tanggal_pengumpulan">tanggal pengumpulan</string>
     <string name="stock_sampah">Stock Sampah</string>
+    <string name="daftar_penarikan_saldo">Daftar Penarikan Saldo</string>
+    <string name="edit_penarikan_saldo">Edit Penarikan Saldo</string>
+    <string name="tanggal_penarikan">Tanggal Penarikan</string>
+    <string name="jumlah_penarikan_saldo">Jumlah Penarikan Saldo</string>
+    <string name="masukkan_jumlah_penarikan_saldo">Masukkan jumlah penarikan saldo</string>
+    <string name="perbarui_penarikan">Perbarui Penarikan</string>
+    <string name="hapus_penarikan">Hapus Penarikan</string>
+    <string name="tambah_penarikan_saldo">Tambah Penarikan Saldo</string>
 </resources>
