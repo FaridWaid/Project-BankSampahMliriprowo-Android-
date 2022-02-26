@@ -102,6 +102,7 @@
                     android:textSize="10sp" />
 
                 <TextView
+                    android:id="@+id/saldoBank"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="0"
@@ -135,6 +136,7 @@
                     android:textSize="10sp" />
 
                 <TextView
+                    android:id="@+id/countAnggota"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="0"
@@ -168,6 +170,7 @@
                     android:textSize="10sp" />
 
                 <TextView
+                    android:id="@+id/countSampah"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="0"

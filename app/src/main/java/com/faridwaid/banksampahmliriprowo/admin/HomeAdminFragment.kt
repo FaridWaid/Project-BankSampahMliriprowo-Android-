@@ -21,13 +21,21 @@ import com.google.firebase.database.*
 import com.google.firebase.storage.FirebaseStorage
 import com.squareup.picasso.Picasso
 import java.io.File
+import java.text.DecimalFormat
+import java.text.NumberFormat
 
 class HomeAdminFragment : Fragment() {
 
     // Mendefinisikan variabel global untuk connect ke Firebase
     private lateinit var referen : DatabaseReference
+    private lateinit var referenceBankSampah : DatabaseReference
+    private lateinit var referenceAnggota : DatabaseReference
+    private lateinit var referenceSampah : DatabaseReference
     // Mendefinisikan variabel global dari view
     private lateinit var textName: TextView
+    private lateinit var textSaldoBank: TextView
+    private lateinit var textCountAnggota: TextView
+    private lateinit var textCountSampah: TextView
     private lateinit var photoProfil: ImageView
 
     override fun onCreateView(
@@ -44,9 +52,15 @@ class HomeAdminFragment : Fragment() {
         // Mendefinisikan variabel yang berisi view
         textName = view.findViewById(R.id.helloUser)
         photoProfil = view.findViewById(R.id.profilePicture)
+        textSaldoBank = view.findViewById(R.id.saldoBank)
+        textCountAnggota = view.findViewById(R.id.countAnggota)
+        textCountSampah = view.findViewById(R.id.countSampah)
 
         // Membuat referen memiliki child userId, yang nantinya akan diisi oleh data user
         referen = FirebaseDatabase.getInstance().getReference("admins").child("admin")
+        referenceBankSampah = FirebaseDatabase.getInstance().getReference("banksampah").child("saldobank")
+        referenceAnggota = FirebaseDatabase.getInstance().getReference("users")
+        referenceSampah = FirebaseDatabase.getInstance().getReference("daftarsampah")
 
         // Memanggil fungsi loadingBar dan mengeset time = 4000
         loadingBar(2000)
@@ -67,6 +81,55 @@ class HomeAdminFragment : Fragment() {
             }
         }
         referen.addListenerForSingleValueEvent(menuListener)
+
+        // Mengambil data saldo bank sampah dengan referenceBankSampah dan dimasukkan kedalam view (text,etc)
+        referenceBankSampah.addListenerForSingleValueEvent(object : ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val bank = snapshot.getValue(BankSampah::class.java)!!
+                val formatter: NumberFormat = DecimalFormat("#,###")
+                val myNumber = bank?.totalSaldo
+                val formattedNumber: String = formatter.format(myNumber)
+                textSaldoBank.setText("Rp. ${formattedNumber}")
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+
+        })
+
+        // Mengambil data count anggota dengan referenceAnggota dan dimasukkan kedalam view (text,etc)
+        referenceAnggota.addListenerForSingleValueEvent(object : ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                var countAnggota = 0
+                for (i in snapshot.children){
+                    countAnggota += 1
+                }
+                textCountAnggota.setText(countAnggota.toString())
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+
+        })
+
+        // Mengambil data count jumlah sampah dengan referenceSampah dan dimasukkan kedalam view (text,etc)
+        referenceSampah.addListenerForSingleValueEvent(object : ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                var countSampah = 0
+                for (i in snapshot.children){
+                    val sampah = i.getValue(DaftarSampah::class.java)
+                    countSampah += sampah?.stockSampah!!
+                }
+                textCountSampah.setText(countSampah.toString())
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+
+        })
 
         // Mendefinisikan variabel item fitur 1
         // overridePendingTransition digunakan untuk animasi dari intent

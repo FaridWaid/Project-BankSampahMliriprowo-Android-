@@ -21,6 +21,8 @@ import com.google.firebase.storage.FirebaseStorage
 import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
 import java.io.File
+import java.text.DecimalFormat
+import java.text.NumberFormat
 
 class HomeFragment : Fragment() {
 
@@ -29,6 +31,9 @@ class HomeFragment : Fragment() {
     private lateinit var referen : DatabaseReference
     // Mendefinisikan variabel global dari view
     private lateinit var textName: TextView
+    private lateinit var textCountPengumpulan: TextView
+    private lateinit var textCountPenarikan: TextView
+    private lateinit var textSaldoUser: TextView
     private lateinit var photoProfil: ImageView
 
     override fun onCreateView(
@@ -49,6 +54,9 @@ class HomeFragment : Fragment() {
         // Mendefinisikan variabel edit text yang nantinya akan berisi inputan user
         textName = view.findViewById(R.id.helloUser)
         photoProfil = view.findViewById(R.id.profilePicture)
+        textCountPengumpulan = view.findViewById(R.id.countPengumpulan)
+        textCountPenarikan = view.findViewById(R.id.countPenarikan)
+        textSaldoUser = view.findViewById(R.id.saldoUser)
 
         // Membuat referen memiliki child userId, yang nantinya akan diisi oleh data user
         referen = FirebaseDatabase.getInstance().getReference("users").child("${userIdentity?.uid}")
@@ -61,6 +69,12 @@ class HomeFragment : Fragment() {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 val user = dataSnapshot.getValue(Users::class.java)
                 textName.setText("Hello ${user?.username}")
+                textCountPengumpulan.setText(user?.jumlahSetoran.toString())
+                textCountPenarikan.setText(user?.jumlahPenarikan.toString())
+                val formatter: NumberFormat = DecimalFormat("#,###")
+                val myNumber = user?.saldo
+                val formattedNumber: String = formatter.format(myNumber)
+                textSaldoUser.setText("Rp. $formattedNumber")
                 if (user?.photoProfil == ""){
                     photoProfil.setImageResource(R.drawable.ic_profile)
                 } else {
