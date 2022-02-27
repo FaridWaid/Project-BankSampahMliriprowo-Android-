@@ -86,5 +86,8 @@
     <string name="hapus_penarikan">Hapus Penarikan</string>
     <string name="tambah_penarikan_saldo">Tambah Penarikan Saldo</string>
     <string name="cari_berdasarkan_nama_sampah">Cari berdasarkan nama sampah</string>
-    <string name="cari_berdasarkan_tanggal_penarikan">Cari berdasarkan tanggal penarikan</string>x
+    <string name="cari_berdasarkan_tanggal_penarikan">Cari berdasarkan tanggal penarikan</string>
+    <string name="daftar_penjualan_sampah">Daftar Penjualan Sampah</string>
+    <string name="texttotalsampah">textTotalSampah</string>
+    <string name="texttotal">textTotal</string>x
 </resources>
