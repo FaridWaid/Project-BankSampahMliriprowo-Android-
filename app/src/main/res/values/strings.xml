@@ -85,5 +85,6 @@
     <string name="perbarui_penarikan">Perbarui Penarikan</string>
     <string name="hapus_penarikan">Hapus Penarikan</string>
     <string name="tambah_penarikan_saldo">Tambah Penarikan Saldo</string>
-    <string name="cari_berdasarkan_nama_sampah">Cari berdasarkan nama sampah</string>x
+    <string name="cari_berdasarkan_nama_sampah">Cari berdasarkan nama sampah</string>
+    <string name="cari_berdasarkan_tanggal_penarikan">Cari berdasarkan tanggal penarikan</string>x
 </resources>

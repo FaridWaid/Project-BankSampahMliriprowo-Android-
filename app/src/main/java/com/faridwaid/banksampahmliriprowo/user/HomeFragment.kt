@@ -99,6 +99,17 @@ class HomeFragment : Fragment() {
             }
         }
 
+        // Mendefinisikan variabel item layout penarikan
+        // overridePendingTransition digunakan untuk animasi dari intent
+        val layoutPenarikanSaldo: LinearLayout = view.findViewById(R.id.layoutPenarikan)
+        layoutPenarikanSaldo.setOnClickListener {
+            // Jika berhasil maka akan pindah ke DaftarPenarikanSaldoUserActivity
+            requireActivity().run{
+                startActivity(Intent(this, DaftarPenarikanSaldoUserActivity::class.java))
+                overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right)
+            }
+        }
+
         // Mendefinisikan variabel item fitur 4
         // overridePendingTransition digunakan untuk animasi dari intent
         val jadwalPengumpulanSampah: MaterialCardView = view.findViewById(R.id.itemFitur4)
