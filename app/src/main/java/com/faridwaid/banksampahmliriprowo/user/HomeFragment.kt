@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import com.faridwaid.banksampahmliriprowo.LoadingDialog
 import com.faridwaid.banksampahmliriprowo.R
@@ -86,6 +87,17 @@ class HomeFragment : Fragment() {
             }
         }
         referen.addListenerForSingleValueEvent(menuListener)
+
+        // Mendefinisikan variabel item layout pengumpulan
+        // overridePendingTransition digunakan untuk animasi dari intent
+        val layoutPengumpulanSampah: LinearLayout = view.findViewById(R.id.layoutPengumpulan)
+        layoutPengumpulanSampah.setOnClickListener {
+            // Jika berhasil maka akan pindah ke DaftarPengumpulanSampahActivity
+            requireActivity().run{
+                startActivity(Intent(this, DaftarPengumpulanSampahActivity::class.java))
+                overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right)
+            }
+        }
 
         // Mendefinisikan variabel item fitur 4
         // overridePendingTransition digunakan untuk animasi dari intent
