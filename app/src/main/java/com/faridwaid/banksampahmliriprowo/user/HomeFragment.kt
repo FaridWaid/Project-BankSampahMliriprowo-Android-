@@ -110,6 +110,17 @@ class HomeFragment : Fragment() {
             }
         }
 
+        // Mendefinisikan variabel item fitur 1
+        // overridePendingTransition digunakan untuk animasi dari intent
+        val pengumpulanSemuaAnggota: MaterialCardView = view.findViewById(R.id.itemFitur1)
+        pengumpulanSemuaAnggota.setOnClickListener {
+            // Jika berhasil maka akan pindah ke DaftarPengumpulanSemuaAnggotaActivity
+            requireActivity().run{
+                startActivity(Intent(this, DaftarPengumpulanSemuaAnggotaActivity::class.java))
+                overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right)
+            }
+        }
+
         // Mendefinisikan variabel item fitur 4
         // overridePendingTransition digunakan untuk animasi dari intent
         val jadwalPengumpulanSampah: MaterialCardView = view.findViewById(R.id.itemFitur4)
