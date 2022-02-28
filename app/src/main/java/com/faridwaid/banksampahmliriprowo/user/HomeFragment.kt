@@ -154,6 +154,17 @@ class HomeFragment : Fragment() {
             }
         }
 
+        // Mendefinisikan variabel item fitur 5
+        // overridePendingTransition digunakan untuk animasi dari intent
+        val saldoBankSampah: MaterialCardView = view.findViewById(R.id.itemFitur5)
+        saldoBankSampah.setOnClickListener {
+            // Jika berhasil maka akan pindah ke SaldoBankSampahActivity
+            requireActivity().run{
+                startActivity(Intent(this, SaldoBankSampahActivity::class.java))
+                overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right)
+            }
+        }
+
     }
 
     // Membuat fungsi "loadingBar" dengan parameter time,

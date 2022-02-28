@@ -93,5 +93,6 @@
     <string name="textpenarikan">textPenarikan</string>
     <string name="textpengumpulan">textPengumpulan</string>
     <string name="daftar_anggota">Daftar Anggota</string>
-    <string name="cari_berdasarkan_nama">Cari berdasarkan nama</string>x
+    <string name="cari_berdasarkan_nama">Cari berdasarkan nama</string>
+    <string name="total_saldo">Total Saldo:</string>
 </resources>
