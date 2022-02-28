@@ -90,5 +90,8 @@
     <string name="daftar_penjualan_sampah">Daftar Penjualan Sampah</string>
     <string name="texttotalsampah">textTotalSampah</string>
     <string name="texttotal">textTotal</string>
-    <string name="textpenarikan">textPenarikan</string>x
+    <string name="textpenarikan">textPenarikan</string>
+    <string name="textpengumpulan">textPengumpulan</string>
+    <string name="daftar_anggota">Daftar Anggota</string>
+    <string name="cari_berdasarkan_nama">Cari berdasarkan nama</string>x
 </resources>
