@@ -89,5 +89,6 @@
     <string name="cari_berdasarkan_tanggal_penarikan">Cari berdasarkan tanggal penarikan</string>
     <string name="daftar_penjualan_sampah">Daftar Penjualan Sampah</string>
     <string name="texttotalsampah">textTotalSampah</string>
-    <string name="texttotal">textTotal</string>x
+    <string name="texttotal">textTotal</string>
+    <string name="textpenarikan">textPenarikan</string>x
 </resources>

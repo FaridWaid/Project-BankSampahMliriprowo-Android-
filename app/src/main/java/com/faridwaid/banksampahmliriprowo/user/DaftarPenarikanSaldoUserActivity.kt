@@ -8,6 +8,7 @@ import android.text.TextWatcher
 import android.view.View
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.faridwaid.banksampahmliriprowo.R
@@ -18,6 +19,8 @@ import com.faridwaid.banksampahmliriprowo.admin.TambahDaftarPenarikanSaldoAdminA
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
+import java.text.DecimalFormat
+import java.text.NumberFormat
 
 class DaftarPenarikanSaldoUserActivity : AppCompatActivity() {
 
@@ -26,6 +29,8 @@ class DaftarPenarikanSaldoUserActivity : AppCompatActivity() {
     private lateinit var daftarPenarikanList: ArrayList<PenarikanSaldo>
     private lateinit var adapter: DaftarPenarikanSaldoUserAdapter
     private lateinit var etSearch: EditText
+    private lateinit var textCountPenarikan: TextView
+    private lateinit var textCountTotal: TextView
     private lateinit var date: String
     // Mendefinisikan variabel global untuk connect ke Firebase
     private lateinit var reference: DatabaseReference
@@ -33,6 +38,10 @@ class DaftarPenarikanSaldoUserActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_daftar_penarikan_saldo_user)
+
+        // Mendefinisikan variabel yang berisi view
+        textCountPenarikan = findViewById(R.id.countPenarikan)
+        textCountTotal = findViewById(R.id.countTotal)
 
         // Mendeklarasikan variabel date
         date = ""
@@ -103,12 +112,21 @@ class DaftarPenarikanSaldoUserActivity : AppCompatActivity() {
         reference.addValueEventListener(object: ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (snapshot.exists()){
+                    var countTotalPenarikan = 0
+                    var countTotal: Long = 0
                     daftarPenarikanList.clear()
                     for (i in snapshot.children){
                         val penarikan = i.getValue(PenarikanSaldo::class.java)
                         if (penarikan != null && penarikan.idAnggota == "${userIdentity?.uid}"){
                             daftarPenarikanList.add(penarikan)
+                            countTotalPenarikan += 1
+                            countTotal += penarikan.totalPenarikan.toLong()
                         }
+                        val formatter: NumberFormat = DecimalFormat("#,###")
+                        val price = countTotal
+                        val formattedNumber: String = formatter.format(price)
+                        textCountPenarikan.setText("Total penarikan yang dilakukan: $countTotalPenarikan kali")
+                        textCountTotal.setText("Total uang yang ditarik: Rp. $formattedNumber")
                     }
 
                     adapter = DaftarPenarikanSaldoUserAdapter(daftarPenarikanList)

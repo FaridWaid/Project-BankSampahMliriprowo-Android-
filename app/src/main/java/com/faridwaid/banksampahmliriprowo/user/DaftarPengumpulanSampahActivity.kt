@@ -7,6 +7,7 @@ import android.text.TextWatcher
 import android.view.View
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.faridwaid.banksampahmliriprowo.R
@@ -16,6 +17,8 @@ import com.faridwaid.banksampahmliriprowo.admin.DaftarSampah
 import com.faridwaid.banksampahmliriprowo.admin.PengumpulanAnggota
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
+import java.text.DecimalFormat
+import java.text.NumberFormat
 
 class DaftarPengumpulanSampahActivity : AppCompatActivity() {
 
@@ -24,6 +27,8 @@ class DaftarPengumpulanSampahActivity : AppCompatActivity() {
     private lateinit var daftarPengumpulanList: ArrayList<PengumpulanAnggota>
     private lateinit var adapter: DaftarPengumpulanSampahUserAdapter
     private lateinit var etSearch: EditText
+    private lateinit var textCountSampah: TextView
+    private lateinit var textCountTotal: TextView
     private lateinit var nameSampah: String
     // Mendefinisikan variabel global untuk connect ke Firebase
     private lateinit var reference: DatabaseReference
@@ -31,6 +36,10 @@ class DaftarPengumpulanSampahActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_daftar_pengumpulan_sampah)
+
+        // Mendefinisikan variabel yang berisi view
+        textCountSampah = findViewById(R.id.countSampah)
+        textCountTotal = findViewById(R.id.countTotal)
 
         // Mendeklarasikan variabel nameSampah
         nameSampah = ""
@@ -101,12 +110,21 @@ class DaftarPengumpulanSampahActivity : AppCompatActivity() {
         reference.addValueEventListener(object: ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (snapshot.exists()){
+                    var countTotalSampah = 0
+                    var countTotal: Long = 0
                     daftarPengumpulanList.clear()
                     for (i in snapshot.children){
                         val pengumpulan = i.getValue(PengumpulanAnggota::class.java)
                         if (pengumpulan != null && pengumpulan.idAnggota == "${userIdentity?.uid}"){
                             daftarPengumpulanList.add(pengumpulan)
+                            countTotalSampah += pengumpulan.weightSampah
+                            countTotal += pengumpulan.total.toLong()
                         }
+                        val formatter: NumberFormat = DecimalFormat("#,###")
+                        val price = countTotal
+                        val formattedNumber: String = formatter.format(price)
+                        textCountSampah.setText("Total sampah yang terkumpulkan: $countTotalSampah(KG)")
+                        textCountTotal.setText("Total uang yang diperoleh: Rp. $formattedNumber")
                     }
 
                     adapter = DaftarPengumpulanSampahUserAdapter(daftarPengumpulanList)
