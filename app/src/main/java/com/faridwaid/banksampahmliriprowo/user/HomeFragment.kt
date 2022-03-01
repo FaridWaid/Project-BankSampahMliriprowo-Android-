@@ -165,6 +165,17 @@ class HomeFragment : Fragment() {
             }
         }
 
+        // Mendefinisikan variabel item fitur 6
+        // overridePendingTransition digunakan untuk animasi dari intent
+        val topAnggota: MaterialCardView = view.findViewById(R.id.itemFitur6)
+        topAnggota.setOnClickListener {
+            // Jika berhasil maka akan pindah ke TopAnggotaActivity
+            requireActivity().run{
+                startActivity(Intent(this, TopAnggotaActivity::class.java))
+                overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right)
+            }
+        }
+
     }
 
     // Membuat fungsi "loadingBar" dengan parameter time,

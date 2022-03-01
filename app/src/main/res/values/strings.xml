@@ -95,4 +95,10 @@
     <string name="daftar_anggota">Daftar Anggota</string>
     <string name="cari_berdasarkan_nama">Cari berdasarkan nama</string>
     <string name="total_saldo">Total Saldo:</string>
+    <string name="note_kecil">Top anggota adalah 3 anggota teratas dengan jumlah pengumpulan terbanyak. Dimana tiap - tiap anggota tersebut akan diberi penghargaan berupa penambahan saldo setiap bulannya dengan nominal: peringkat 1 (5,000), peringkat 2 (4,000), peringkat 3 (3,000).</string>
+    <string name="catatan">Catatan:</string>
+    <string name="top_anggota">Top Anggota</string>
+    <string name="_0">0</string>
+    <string name="mendapatkan_penambahan_saldo_sebesar">Mendapatkan penambahan saldo sebesar:</string>
+    <string name="jumlah_pengumpulan">Jumlah Pengumpulan:</string>
 </resources>
