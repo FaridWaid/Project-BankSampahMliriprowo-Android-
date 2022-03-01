@@ -160,16 +160,4 @@ class BeginningAppActivity : AppCompatActivity() {
         }
     }
 
-    // Membuat fungsi "onStart"
-    override fun onStart() {
-        super.onStart()
-        // Jika user sudah ada user yang login maka akan langsung diarahkan ke HomeActivity
-        if (auth.currentUser != null){
-            Intent(this@BeginningAppActivity, HomeActivity::class.java).also { intent ->
-                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                startActivity(intent)
-            }
-        }
-    }
-
 }

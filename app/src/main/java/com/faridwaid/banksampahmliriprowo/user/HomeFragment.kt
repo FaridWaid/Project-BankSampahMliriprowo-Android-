@@ -11,6 +11,8 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.appcompat.widget.AppCompatImageView
+import com.faridwaid.banksampahmliriprowo.BeginningAppActivity
 import com.faridwaid.banksampahmliriprowo.LoadingDialog
 import com.faridwaid.banksampahmliriprowo.R
 import com.faridwaid.banksampahmliriprowo.Users
@@ -172,6 +174,17 @@ class HomeFragment : Fragment() {
             // Jika berhasil maka akan pindah ke TopAnggotaActivity
             requireActivity().run{
                 startActivity(Intent(this, TopAnggotaActivity::class.java))
+                overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right)
+            }
+        }
+
+        // Mendefinisikan variabel item question
+        // overridePendingTransition digunakan untuk animasi dari intent
+        val question: AppCompatImageView = view.findViewById(R.id.question)
+        question.setOnClickListener {
+            // Jika berhasil maka akan pindah ke BeginningAppActivity
+            requireActivity().run{
+                startActivity(Intent(this, BeginningAppActivity::class.java))
                 overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right)
             }
         }

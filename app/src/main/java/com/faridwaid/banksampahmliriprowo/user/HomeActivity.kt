@@ -38,7 +38,6 @@ class HomeActivity : AppCompatActivity() {
         val navBottom: SmoothBottomBar = findViewById(R.id.nav_bottom)
         navBottom.setupWithNavController(menu, navController)
 
-
     }
 
 }
