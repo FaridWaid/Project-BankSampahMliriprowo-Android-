@@ -27,6 +27,7 @@ import com.google.firebase.database.*
 import com.google.firebase.storage.FirebaseStorage
 import com.squareup.picasso.Picasso
 import java.io.File
+import kotlin.properties.Delegates
 
 class ProfileAdminFragment : Fragment() {
 
@@ -40,6 +41,7 @@ class ProfileAdminFragment : Fragment() {
     private lateinit var etUsername: TextInputEditText
     private lateinit var etEmail: TextInputEditText
     private lateinit var etPassword: TextInputEditText
+    private var changeImage by Delegates.notNull<Boolean>()
 
     // Membuat companion object dari Image
     companion object{
@@ -66,6 +68,7 @@ class ProfileAdminFragment : Fragment() {
         etUsername = view.findViewById(R.id.etUsername)
         etEmail = view.findViewById(R.id.etEmail)
         etPassword = view.findViewById(R.id.etPassword)
+        changeImage = false
 
         // Membuat referen memiliki child userId, yang nantinya akan diisi oleh data user
         referen = FirebaseDatabase.getInstance().getReference("admins").child("admin")
@@ -156,7 +159,6 @@ class ProfileAdminFragment : Fragment() {
                         // Mengupdate child yang ada pada reference dengan inputan baru,
                         val menuListener = object : ValueEventListener {
                             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                                val user = dataSnapshot.getValue(Users::class.java)
                                 val adminUpdate = Admin(username, email, password, downloadUrl.toString())
                                 referen.setValue(adminUpdate).addOnCompleteListener {
                                     // Memanggil fungsi loadingBar dan mengeset time = 4000
@@ -176,6 +178,27 @@ class ProfileAdminFragment : Fragment() {
                         referen.addListenerForSingleValueEvent(menuListener)
                     }
                 }
+            } else if (changeImage == false){
+                // Mengupdate child yang ada pada reference dengan inputan baru,
+                val menuListener = object : ValueEventListener {
+                    override fun onDataChange(dataSnapshot: DataSnapshot) {
+                        val admin = dataSnapshot.getValue(Admin::class.java)
+                        val adminUpdate = Admin(username, email, password, admin?.photoProfil!!)
+                        referen.setValue(adminUpdate).addOnCompleteListener {
+                            loadingBar(3000)
+                            if (it.isSuccessful){
+                                alertDialog("Konfirmasi!", "Data pribadi anda berhasil diubah!")
+                            } else {
+                                alertDialog("Gagal!", "Gagal Melakukan Perubahan Data Pribadi!")
+                            }
+                        }
+                    }
+                    override fun onCancelled(databaseError: DatabaseError) {
+                        // handle error
+                    }
+                }
+
+                referen.addListenerForSingleValueEvent(menuListener)
             } else {
                 refImage.putFile(imageUri).addOnSuccessListener {
                     var downloadUrl: Uri? = null
@@ -184,7 +207,6 @@ class ProfileAdminFragment : Fragment() {
                         // Mengupdate child yang ada pada reference dengan inputan baru,
                         val menuListener = object : ValueEventListener {
                             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                                val user = dataSnapshot.getValue(Users::class.java)
                                 val adminUpdate = Admin(username, email, password, downloadUrl.toString())
                                 referen.setValue(adminUpdate).addOnCompleteListener {
                                     loadingBar(3000)
@@ -269,6 +291,7 @@ class ProfileAdminFragment : Fragment() {
             photoProfil.setImageURI(data?.data)
             imageUri = Uri.parse("${data?.data}")
             textImage.visibility = View.INVISIBLE
+            changeImage = true
         }
     }
 
