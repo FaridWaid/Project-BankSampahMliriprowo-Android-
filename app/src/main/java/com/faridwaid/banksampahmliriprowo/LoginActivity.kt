@@ -13,10 +13,12 @@ import androidx.appcompat.app.AlertDialog
 import com.faridwaid.banksampahmliriprowo.admin.Admin
 import com.faridwaid.banksampahmliriprowo.admin.HomeAdminActivity
 import com.faridwaid.banksampahmliriprowo.user.HomeActivity
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
+import com.google.firebase.messaging.FirebaseMessaging
 
 class LoginActivity : AppCompatActivity() {
 
@@ -171,11 +173,34 @@ class LoginActivity : AppCompatActivity() {
         auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener(this){
                 if (it.isSuccessful){
-                    // Jika berhasil maka akan pindah activity ke activity HomeActivity
-                    Intent(this@LoginActivity, HomeActivity::class.java).also { intent ->
-                        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                        startActivity(intent)
-                    }
+                    FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+                        // mendapatkan token baru
+                        val token = task.result
+                        // Membuat referen memiliki child userId, yang nantinya akan diisi oleh data user
+                        val reference = FirebaseDatabase.getInstance().getReference("users").child("${auth.currentUser?.uid}")
+                        // Mengambil token untuk dimasukkan ke dalam user
+                        reference.addListenerForSingleValueEvent(object : ValueEventListener{
+                            override fun onDataChange(snapshot: DataSnapshot) {
+                                val users = snapshot.getValue(Users::class.java)!!
+                                val userUpdate = Users(users.id, users.username, users.email, users.photoProfil, users.jumlahSetoran, users.jumlahPenarikan, users.saldo, token!! )
+                                reference.setValue(userUpdate).addOnCompleteListener {
+                                    if (it.isSuccessful){
+                                        // Jika berhasil maka akan pindah activity ke activity HomeActivity
+                                        Intent(this@LoginActivity, HomeActivity::class.java).also { intent ->
+                                            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                                            startActivity(intent)
+                                        }
+                                    }
+                                }
+                            }
+
+                            override fun onCancelled(error: DatabaseError) {
+                                TODO("Not yet implemented")
+                            }
+
+                        })
+
+                    })
                 } else{
                     // Jika gagal membuat akun baru, maka akan memunculkan toast error
                     alertDialog("Gagal Login Ke Akun!", "Pastikan email dan password yang anda inputkan sudah benar!", false)

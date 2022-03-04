@@ -186,6 +186,17 @@ class HomeAdminFragment : Fragment() {
             }
         }
 
+        // Mendefinisikan variabel item fitur 6
+        // overridePendingTransition digunakan untuk animasi dari intent
+        val notificationAdmin: MaterialCardView = view.findViewById(R.id.itemFitur6)
+        notificationAdmin.setOnClickListener {
+            // Jika berhasil maka akan pindah ke NotificationAdminActivity
+            requireActivity().run{
+                startActivity(Intent(this, NotificationAdminActivity::class.java))
+                overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right)
+            }
+        }
+
         // Mendefinisikan variabel item fitur 7
         // overridePendingTransition digunakan untuk animasi dari intent
         val jadwalPengumpulanSampah: MaterialCardView = view.findViewById(R.id.itemFitur7)

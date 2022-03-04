@@ -12,10 +12,12 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import com.faridwaid.banksampahmliriprowo.user.HomeActivity
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
+import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.storage.FirebaseStorage
 
 class RegisterActivity : AppCompatActivity() {
@@ -155,24 +157,30 @@ class RegisterActivity : AppCompatActivity() {
                         var downloadUrl: Uri? = null
                         refImage.downloadUrl.addOnSuccessListener { it1 ->
                             downloadUrl = it1
-                            // Membuat variabel "newUser" yang berisikan beberapa data dan data tersebut diinputkan ke dalam Users
-                            val newUser = Users(idUser!!, username, email, downloadUrl.toString(), 0, 0, 0, "")
-                            // Jika idUser tidak null/kosong
-                            if (idUser != null){
-                                // Membuat suatu child realtime database baru dengan child = "idUser",
-                                // dan valuenya berisi data yang ada di dalam "newUser"
-                                ref.child(idUser).setValue(newUser).addOnCompleteListener {
-                                    // Jika berhasil menambahkan child baru ke realtime database, maka akan memunculkan toast,
-                                    // Kemudian pindah activity ke activity LoginActivity
-                                    Intent(this@RegisterActivity, LoginActivity::class.java).also { intent ->
-                                        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                                        startActivity(intent)
+                            // Mengambil token untuk dimasukkan ke dalam user
+                            FirebaseMessaging.getInstance().token.addOnCompleteListener(
+                                OnCompleteListener { task ->
+                                // Mendapatkan token baru
+                                val token = task.result
+                                // Membuat variabel "newUser" yang berisikan beberapa data dan data tersebut diinputkan ke dalam Users
+                                val newUser = Users(idUser!!, username, email, downloadUrl.toString(), 0, 0, 0, token!!)
+                                // Jika idUser tidak null/kosong
+                                if (idUser != null){
+                                    // Membuat suatu child realtime database baru dengan child = "idUser",
+                                    // dan valuenya berisi data yang ada di dalam "newUser"
+                                    ref.child(idUser).setValue(newUser).addOnCompleteListener {
+                                        // Jika berhasil menambahkan child baru ke realtime database, maka akan memunculkan toast,
+                                        // Kemudian pindah activity ke activity LoginActivity
+                                        Intent(this@RegisterActivity, LoginActivity::class.java).also { intent ->
+                                            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                                            startActivity(intent)
+                                        }
                                     }
+                                } else {
+                                    // Jika gagal menambahkan child baru ke realtime database, maka akan memunculkan toast gagal
+                                    alertDialog("Gagal membuat akun!", "Pastikan anda menginputkan nama, email, dan password dengan benar!", false)
                                 }
-                            } else {
-                                // Jika gagal menambahkan child baru ke realtime database, maka akan memunculkan toast gagal
-                                alertDialog("Gagal membuat akun!", "Pastikan anda menginputkan nama, email, dan password dengan benar!", false)
-                            }
+                            })
                         }
                     }
                 } else{

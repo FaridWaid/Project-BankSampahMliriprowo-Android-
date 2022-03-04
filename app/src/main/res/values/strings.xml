@@ -101,4 +101,10 @@
     <string name="_0">0</string>
     <string name="mendapatkan_penambahan_saldo_sebesar">Mendapatkan penambahan saldo sebesar:</string>
     <string name="jumlah_pengumpulan">Jumlah Pengumpulan:</string>
+    <string name="notifikasi">Notifikasi</string>
+    <string name="semua_anggota">Semua Anggota</string>
+    <string name="judul_notifikasi">Judul Notifikasi</string>
+    <string name="pesan_notifikasi">Pesan Notifikasi</string>
+    <string name="message">Message</string>
+    <string name="kirim">Kirim</string>
 </resources>
