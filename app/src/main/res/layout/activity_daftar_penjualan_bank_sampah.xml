@@ -61,7 +61,7 @@
             android:layout_height="match_parent"
             android:layout_marginStart="8dp"
             android:background="@null"
-            android:hint="@string/search"
+            android:hint="@string/cari_berdasarkan_nama_sampah"
             android:importantForAutofill="no"
             android:inputType="text"
             android:textColor="@color/secondary_text"

@@ -44,9 +44,11 @@ class DaftarPengumpulanSampahUserAdapter(private var list: ArrayList<Pengumpulan
                 val capitalize = pengumpulan.idSampah.capitalize()
                 val formatter: NumberFormat = DecimalFormat("#,###")
                 val myNumber = pengumpulan.total.toLong()
+                val myNumber2 = pengumpulan.priceSampah.toLong()
                 val formattedNumber: String = formatter.format(myNumber)
+                val formattedNumber2: String = formatter.format(myNumber2)
                 typeSampah.text = "Jenis sampah: ${capitalize}(${pengumpulan.weightSampah}KG)"
-                priceSampah.text = "Harga sampah: ${pengumpulan.priceSampah}/KG"
+                priceSampah.text = "Harga sampah: $formattedNumber2/KG"
                 totalPrice.text = "Total yang didapat: Rp. ${formattedNumber}"
                 datePengumpulan.text = "Tanggal pengumpulan: ${pengumpulan.datePengumpulan}"
             }

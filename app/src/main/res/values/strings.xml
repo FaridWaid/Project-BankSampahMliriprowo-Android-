@@ -75,7 +75,7 @@
     <string name="type_sampah">Type sampah</string>
     <string name="price_sampah">Price sampah</string>
     <string name="total_price">Total price</string>
-    <string name="tanggal_pengumpulan">tanggal pengumpulan</string>
+    <string name="tanggal_pengumpulan">Tanggal pengumpulan</string>
     <string name="stock_sampah">Stock Sampah</string>
     <string name="daftar_penarikan_saldo">Daftar Penarikan Saldo</string>
     <string name="edit_penarikan_saldo">Edit Penarikan Saldo</string>
@@ -107,4 +107,6 @@
     <string name="pesan_notifikasi">Pesan Notifikasi</string>
     <string name="message">Message</string>
     <string name="kirim">Kirim</string>
+    <string name="cari_berdasarkan_nama_anggota">Cari berdasarkan nama anggota</string>
+    <string name="perbarui_anggota">Perbarui Anggota</string>
 </resources>

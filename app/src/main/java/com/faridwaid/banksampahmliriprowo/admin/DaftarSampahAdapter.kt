@@ -13,6 +13,8 @@ import com.google.firebase.storage.FirebaseStorage
 import com.makeramen.roundedimageview.RoundedImageView
 import com.squareup.picasso.Picasso
 import java.io.File
+import java.text.DecimalFormat
+import java.text.NumberFormat
 
 class DaftarSampahAdapter(val list: ArrayList<DaftarSampah>, val method: DaftarSampahAdminActivity): RecyclerView.Adapter<DaftarSampahAdapter.DaftarViewHolder>() {
 
@@ -29,7 +31,10 @@ class DaftarSampahAdapter(val list: ArrayList<DaftarSampah>, val method: DaftarS
         fun bind(sampah: DaftarSampah){
             with(itemView){
                 typeSampah.text = sampah.nameSampah.toUpperCase()
-                priceSampah.text = "Rp. ${sampah.priceSampah} / KG"
+                val formatter: NumberFormat = DecimalFormat("#,###")
+                val myNumber = sampah.priceSampah.toLong()
+                val formattedNumber: String = formatter.format(myNumber)
+                priceSampah.text = "Rp. $formattedNumber / KG"
                 descriptionSampah.text = "${sampah.descriptionSampah}"
                 stockSampah.text = "${sampah.stockSampah}"
                 Picasso.get().load(sampah.photoSampah).into(imageSampah)

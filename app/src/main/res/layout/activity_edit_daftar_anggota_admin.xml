@@ -220,7 +220,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginBottom="16dp"
         android:background="@drawable/rounded_border2"
-        android:text="@string/perbarui_sampah"
+        android:text="@string/perbarui_anggota"
         android:textColor="@color/black"
         android:textStyle="bold"
         android:textSize="18sp"

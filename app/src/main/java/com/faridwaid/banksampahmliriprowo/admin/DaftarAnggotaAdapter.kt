@@ -17,6 +17,8 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
 import com.makeramen.roundedimageview.RoundedImageView
 import com.squareup.picasso.Picasso
+import java.text.DecimalFormat
+import java.text.NumberFormat
 
 class DaftarAnggotaAdapter(private var list: ArrayList<Users>, val method: DaftarAnggotaAdminActivity): RecyclerView.Adapter<DaftarAnggotaAdapter.DaftarAnggotaViewHolder>() {
 
@@ -33,7 +35,10 @@ class DaftarAnggotaAdapter(private var list: ArrayList<Users>, val method: Dafta
         fun bind(users: Users){
             with(itemView){
                 typeUsername.text = users.username.toUpperCase()
-                saldoUser.text = "Saldo: Rp. ${users.saldo}"
+                val formatter: NumberFormat = DecimalFormat("#,###")
+                val myNumber = users.saldo
+                val formattedNumber: String = formatter.format(myNumber)
+                saldoUser.text = "Saldo: Rp. ${formattedNumber}"
                 Picasso.get().load(users.photoProfil).into(imageUser)
                 itemView.setOnClickListener {
                     val moveIntent = Intent(itemView.context, EditDaftarAnggotaAdminActivity::class.java)

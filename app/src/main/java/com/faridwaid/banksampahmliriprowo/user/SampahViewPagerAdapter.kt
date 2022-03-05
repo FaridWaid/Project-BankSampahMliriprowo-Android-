@@ -10,6 +10,8 @@ import com.faridwaid.banksampahmliriprowo.admin.DaftarSampah
 import com.faridwaid.banksampahmliriprowo.admin.DaftarSampahAdminActivity
 import com.makeramen.roundedimageview.RoundedImageView
 import com.squareup.picasso.Picasso
+import java.text.DecimalFormat
+import java.text.NumberFormat
 
 class SampahViewPagerAdapter(val list: ArrayList<DaftarSampah>): RecyclerView.Adapter<SampahViewPagerAdapter.DaftarViewHolder>() {
 
@@ -23,7 +25,10 @@ class SampahViewPagerAdapter(val list: ArrayList<DaftarSampah>): RecyclerView.Ad
         fun bind(sampah: DaftarSampah){
             with(itemView){
                 typeSampah.text = sampah.nameSampah.toUpperCase()
-                priceSampah.text = "Rp. ${sampah.priceSampah} / KG"
+                val formatter: NumberFormat = DecimalFormat("#,###")
+                val myNumber = sampah.priceSampah.toLong()
+                val formattedNumber: String = formatter.format(myNumber)
+                priceSampah.text = "Rp. $formattedNumber / KG"
                 descriptionSampah.text = "${sampah.descriptionSampah}"
                 Picasso.get().load(sampah.photoSampah).into(imageSampah)
             }
