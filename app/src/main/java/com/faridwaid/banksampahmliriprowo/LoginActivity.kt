@@ -1,14 +1,15 @@
 package com.faridwaid.banksampahmliriprowo
 
+import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
+import android.net.ConnectivityManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.util.Patterns
 import android.widget.Button
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import com.faridwaid.banksampahmliriprowo.admin.Admin
 import com.faridwaid.banksampahmliriprowo.admin.HomeAdminActivity
@@ -19,6 +20,7 @@ import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.google.firebase.messaging.FirebaseMessaging
+import kotlin.properties.Delegates
 
 class LoginActivity : AppCompatActivity() {
 
@@ -30,14 +32,20 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var emailContainer: TextInputLayout
     private lateinit var etPassword: TextInputEditText
     private lateinit var passwordContainer: TextInputLayout
+    private var checkInternet by Delegates.notNull<Boolean>()
     // Mendifinisikan variabel global untuk login admin
     private lateinit var emailAdmin: String
     private lateinit var passwordAdmin: String
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
+
+        // Jika tidak ada koneksi internet maka akan memanggil fungsi "showInternetDialog"
+        if (!isConnected(this)){
+            showInternetDialog()
+        }
+
         // Mendefinisikan variabel yang digunukan untuk beralih ke activity RegisterActivity
         val toRegister: TextView = findViewById(R.id.toRegister)
         // Ketika variabel "toRegister" diklik maka akan beralih ke RegisterActivity
@@ -84,6 +92,13 @@ class LoginActivity : AppCompatActivity() {
         val btnLogin: Button = findViewById(R.id.btnLogin)
         // Ketika "btnLogin" di klik maka akan mencoba masuk ke halaman user
         btnLogin.setOnClickListener {
+
+            // Jika tidak ada koneksi internet maka akan memanggil fungsi "showInternetDialog"
+            if (!isConnected(this)){
+                showInternetDialog()
+                return@setOnClickListener
+            }
+
             // Membuat variabel baru yang berisi inputan user
             val email = etEmail.text.toString().trim()
             val password = etPassword.text.toString().trim()
@@ -129,6 +144,35 @@ class LoginActivity : AppCompatActivity() {
             }
         }
 
+    }
+
+    // Fungsi ini digunakan untuk menampilkan dialog peringatan tidak tersambung ke internet,
+    // jika tetep tidak connect ke internet maka tetap looping dialog tersebut
+    private fun showInternetDialog() {
+        val alertDialog = AlertDialog.Builder(this)
+        alertDialog.apply {
+            // Menambahkan title dan pesan ke dalam alert dialog
+            setTitle("PERINGATAN!")
+            setMessage("Tidak ada koneksi internet, mohon nyalakan mobile data/wifi anda terlebih dahulu")
+            setPositiveButton(
+                "Coba lagi",
+                DialogInterface.OnClickListener { dialogInterface, i ->
+                    dialogInterface.dismiss()
+                    if (!isConnected(this@LoginActivity)){
+                        showInternetDialog()
+                    }
+                })
+        }
+        alertDialog.show()
+    }
+
+    // Fungsi untuk melakukan pengecekan apakah ada internet atau tidak
+    private fun isConnected(contextActivity: LoginActivity): Boolean {
+        val connectivityManager = contextActivity.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val wifiConn = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI)
+        val mobileConn = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE)
+
+        return wifiConn != null && wifiConn.isConnected || mobileConn != null && mobileConn.isConnected
     }
 
     // Membuat fungsi "alertDialog" dengan parameter title, message, dan backActivity
@@ -268,5 +312,4 @@ class LoginActivity : AppCompatActivity() {
             }
         }
     }
-
 }

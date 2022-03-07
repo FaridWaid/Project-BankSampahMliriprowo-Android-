@@ -1,24 +1,21 @@
 package com.faridwaid.banksampahmliriprowo.user
 
+import android.content.Context
 import android.content.DialogInterface
-import android.content.Intent
+import android.net.ConnectivityManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
 import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.AppCompatImageView
-import androidx.navigation.Navigation
-import com.faridwaid.banksampahmliriprowo.LoginActivity
+import com.faridwaid.banksampahmliriprowo.ForgotPasswordActivity
 import com.faridwaid.banksampahmliriprowo.R
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
-import com.google.firebase.database.DatabaseReference
-import kotlin.properties.Delegates
 
 class UpdatePasswordActivity : AppCompatActivity() {
 
@@ -35,6 +32,11 @@ class UpdatePasswordActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_update_password)
+
+        // Jika tidak ada koneksi internet maka akan memanggil fungsi "showInternetDialog"
+        if (!isConnected(this)){
+            showInternetDialog()
+        }
 
         // Mengisi variabel auth dengan fungsi yang ada pada FirebaseAuth
         auth = FirebaseAuth.getInstance()
@@ -57,6 +59,12 @@ class UpdatePasswordActivity : AppCompatActivity() {
         // Ketika "buttonSubmit" di klik maka akan mencoba menjalankan kondisi yang ada di dalam
         val buttonSubmit: Button = findViewById(R.id.btnSubmit)
         buttonSubmit.setOnClickListener {
+
+            // Jika tidak ada koneksi internet maka akan memanggil fungsi "showInternetDialog"
+            if (!isConnected(this)){
+                showInternetDialog()
+                return@setOnClickListener
+            }
 
             // Membuat variabel baru yang berisi inputan user
             val oldPassword = etOldPassword.text.toString()
@@ -111,6 +119,35 @@ class UpdatePasswordActivity : AppCompatActivity() {
             onBackPressed()
             overridePendingTransition(R.anim.slide_from_top, R.anim.slide_to_bottom)
         }
+    }
+
+    // Fungsi ini digunakan untuk menampilkan dialog peringatan tidak tersambung ke internet,
+    // jika tetep tidak connect ke internet maka tetap looping dialog tersebut
+    private fun showInternetDialog() {
+        val alertDialog = AlertDialog.Builder(this)
+        alertDialog.apply {
+            // Menambahkan title dan pesan ke dalam alert dialog
+            setTitle("PERINGATAN!")
+            setMessage("Tidak ada koneksi internet, mohon nyalakan mobile data/wifi anda terlebih dahulu")
+            setPositiveButton(
+                "Coba lagi",
+                DialogInterface.OnClickListener { dialogInterface, i ->
+                    dialogInterface.dismiss()
+                    if (!isConnected(this@UpdatePasswordActivity)){
+                        showInternetDialog()
+                    }
+                })
+        }
+        alertDialog.show()
+    }
+
+    // Fungsi untuk melakukan pengecekan apakah ada internet atau tidak
+    private fun isConnected(contextActivity: UpdatePasswordActivity): Boolean {
+        val connectivityManager = contextActivity.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val wifiConn = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI)
+        val mobileConn = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE)
+
+        return wifiConn != null && wifiConn.isConnected || mobileConn != null && mobileConn.isConnected
     }
 
     // Membuat fungsi "alertPassword" dengan parameter title, message, dan backActivity

@@ -1,6 +1,8 @@
 package com.faridwaid.banksampahmliriprowo.admin
 
+import android.content.Context
 import android.content.DialogInterface
+import android.net.ConnectivityManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
@@ -30,6 +32,11 @@ class EditJadwalPengumpulanSampahAdminActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit_jadwal_pengumpulan_sampah_admin)
 
+        // Jika tidak ada koneksi internet maka akan memanggil fungsi "showInternetDialog"
+        if (!isConnected(this)){
+            showInternetDialog()
+        }
+
         //mendapatkan id untuk set data
         val idDay = intent.getStringExtra(EXTRA_DAY)
 
@@ -57,6 +64,12 @@ class EditJadwalPengumpulanSampahAdminActivity : AppCompatActivity() {
 
         // Ketika "updateButton" di klik maka akan melakukan aksi
         updateButton.setOnClickListener {
+
+            // Jika tidak ada koneksi internet maka akan memanggil fungsi "showInternetDialog"
+            if (!isConnected(this)){
+                showInternetDialog()
+                return@setOnClickListener
+            }
 
             // Membuat variabel baru yang berisi inputan user
             val dayInput = etDay.text.toString().trim().toLowerCase()
@@ -96,6 +109,13 @@ class EditJadwalPengumpulanSampahAdminActivity : AppCompatActivity() {
 
         // Ketika "deleteButton" di klik maka akan melakukan aksi, dan menampilkan alert dialog
         deleteButton.setOnClickListener {
+
+            // Jika tidak ada koneksi internet maka akan memanggil fungsi "showInternetDialog"
+            if (!isConnected(this)){
+                showInternetDialog()
+                return@setOnClickListener
+            }
+
             val alertDialog = AlertDialog.Builder(this)
             alertDialog.apply {
                 setTitle("Konfirmasi")
@@ -126,6 +146,35 @@ class EditJadwalPengumpulanSampahAdminActivity : AppCompatActivity() {
             overridePendingTransition(R.anim.slide_from_top, R.anim.slide_to_bottom)
         }
 
+    }
+
+    // Fungsi ini digunakan untuk menampilkan dialog peringatan tidak tersambung ke internet,
+    // jika tetep tidak connect ke internet maka tetap looping dialog tersebut
+    private fun showInternetDialog() {
+        val alertDialog = AlertDialog.Builder(this)
+        alertDialog.apply {
+            // Menambahkan title dan pesan ke dalam alert dialog
+            setTitle("PERINGATAN!")
+            setMessage("Tidak ada koneksi internet, mohon nyalakan mobile data/wifi anda terlebih dahulu")
+            setPositiveButton(
+                "Coba lagi",
+                DialogInterface.OnClickListener { dialogInterface, i ->
+                    dialogInterface.dismiss()
+                    if (!isConnected(this@EditJadwalPengumpulanSampahAdminActivity)){
+                        showInternetDialog()
+                    }
+                })
+        }
+        alertDialog.show()
+    }
+
+    // Fungsi untuk melakukan pengecekan apakah ada internet atau tidak
+    private fun isConnected(contextActivity: EditJadwalPengumpulanSampahAdminActivity): Boolean {
+        val connectivityManager = contextActivity.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val wifiConn = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI)
+        val mobileConn = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE)
+
+        return wifiConn != null && wifiConn.isConnected || mobileConn != null && mobileConn.isConnected
     }
 
     // Membuat fungsi "alertDialog" dengan parameter title, message, dan backActivity

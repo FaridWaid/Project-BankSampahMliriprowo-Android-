@@ -2,7 +2,6 @@ package com.faridwaid.banksampahmliriprowo.admin
 
 import android.content.DialogInterface
 import android.content.Intent
-import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
@@ -19,14 +18,11 @@ import androidx.appcompat.app.AppCompatActivity
 import com.faridwaid.banksampahmliriprowo.LoadingDialog
 import com.faridwaid.banksampahmliriprowo.LoginActivity
 import com.faridwaid.banksampahmliriprowo.R
-import com.faridwaid.banksampahmliriprowo.Users
 import com.google.android.material.textfield.TextInputEditText
-import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.google.firebase.storage.FirebaseStorage
 import com.squareup.picasso.Picasso
-import java.io.File
 import kotlin.properties.Delegates
 
 class ProfileAdminFragment : Fragment() {

@@ -1,7 +1,9 @@
 package com.faridwaid.banksampahmliriprowo.admin
 
 import android.app.DatePickerDialog
+import android.content.Context
 import android.content.DialogInterface
+import android.net.ConnectivityManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.*
@@ -32,6 +34,11 @@ class TambahDaftarPenarikanSaldoAdminActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tambah_daftar_penarikan_saldo_admin)
+
+        // Jika tidak ada koneksi internet maka akan memanggil fungsi "showInternetDialog"
+        if (!isConnected(this)){
+            showInternetDialog()
+        }
 
         // Mendefinisikan variabel yang nantinya akan berisi inputan user
         etTotal = findViewById(R.id.etTotal)
@@ -119,6 +126,12 @@ class TambahDaftarPenarikanSaldoAdminActivity : AppCompatActivity() {
 
         // Ketika "tambahButton" di klik maka akan melakukan aksi
         tambahButton.setOnClickListener {
+
+            // Jika tidak ada koneksi internet maka akan memanggil fungsi "showInternetDialog"
+            if (!isConnected(this)){
+                showInternetDialog()
+                return@setOnClickListener
+            }
 
             // Membuat variabel baru yang berisi inputan user
             val totalInput = etTotal.text.toString().trim()
@@ -224,6 +237,35 @@ class TambahDaftarPenarikanSaldoAdminActivity : AppCompatActivity() {
             overridePendingTransition(R.anim.slide_from_top, R.anim.slide_to_bottom)
         }
 
+    }
+
+    // Fungsi ini digunakan untuk menampilkan dialog peringatan tidak tersambung ke internet,
+    // jika tetep tidak connect ke internet maka tetap looping dialog tersebut
+    private fun showInternetDialog() {
+        val alertDialog = AlertDialog.Builder(this)
+        alertDialog.apply {
+            // Menambahkan title dan pesan ke dalam alert dialog
+            setTitle("PERINGATAN!")
+            setMessage("Tidak ada koneksi internet, mohon nyalakan mobile data/wifi anda terlebih dahulu")
+            setPositiveButton(
+                "Coba lagi",
+                DialogInterface.OnClickListener { dialogInterface, i ->
+                    dialogInterface.dismiss()
+                    if (!isConnected(this@TambahDaftarPenarikanSaldoAdminActivity)){
+                        showInternetDialog()
+                    }
+                })
+        }
+        alertDialog.show()
+    }
+
+    // Fungsi untuk melakukan pengecekan apakah ada internet atau tidak
+    private fun isConnected(contextActivity: TambahDaftarPenarikanSaldoAdminActivity): Boolean {
+        val connectivityManager = contextActivity.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val wifiConn = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI)
+        val mobileConn = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE)
+
+        return wifiConn != null && wifiConn.isConnected || mobileConn != null && mobileConn.isConnected
     }
 
     // Membuat fungsi "alertDialog" dengan parameter title, message, dan backActivity

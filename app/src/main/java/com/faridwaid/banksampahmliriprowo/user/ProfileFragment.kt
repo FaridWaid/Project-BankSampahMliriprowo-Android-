@@ -1,9 +1,10 @@
 package com.faridwaid.banksampahmliriprowo.user
 
 
+import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
-import android.graphics.BitmapFactory
+import android.net.ConnectivityManager
 import android.os.Bundle
 import android.os.Handler
 import androidx.fragment.app.Fragment
@@ -21,10 +22,8 @@ import com.faridwaid.banksampahmliriprowo.R
 import com.faridwaid.banksampahmliriprowo.Users
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
-import com.google.firebase.storage.FirebaseStorage
 import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
-import java.io.File
 
 
 class ProfileFragment : Fragment() {
