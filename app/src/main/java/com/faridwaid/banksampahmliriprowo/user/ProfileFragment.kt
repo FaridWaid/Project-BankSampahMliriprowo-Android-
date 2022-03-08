@@ -16,6 +16,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.faridwaid.banksampahmliriprowo.LoadingDialog
 import com.faridwaid.banksampahmliriprowo.LoginActivity
 import com.faridwaid.banksampahmliriprowo.R
@@ -38,6 +39,7 @@ class ProfileFragment : Fragment() {
     private lateinit var icVerified: ImageView
     private lateinit var icUnverified: ImageView
     private lateinit var photoProfil: CircleImageView
+    private lateinit var refreshData: SwipeRefreshLayout
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -61,6 +63,17 @@ class ProfileFragment : Fragment() {
         icVerified = view.findViewById(R.id.icVerified)
         icUnverified = view.findViewById(R.id.icUnverified)
         photoProfil = view.findViewById(R.id.ivProfile)
+        refreshData = view.findViewById(R.id.refreshData)
+
+        refreshData.setOnRefreshListener {
+            // Loading selama beberapa waktu, ketika sudah selesa nilai refreshFrament menjadi false
+            Handler().postDelayed(Runnable {
+                refreshData.isRefreshing = false
+            }, 2000)
+
+            // Memanggil fungsi keepData
+            keepData()
+        }
 
         // Membuat referen memiliki child userId, yang nantinya akan diisi oleh data user
         referen = FirebaseDatabase.getInstance().getReference("users").child("${userIdentity?.uid}")
@@ -68,24 +81,8 @@ class ProfileFragment : Fragment() {
         // Memanggil fungsi loadingBar dan mengeset time = 4000
         loadingBar(1000)
 
-        // Mengambil data user dengan referen dan dimasukkan kedalam view (text,etc)
-        val menuListener = object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                val user = dataSnapshot.getValue(Users::class.java)
-                textName.text = user?.username
-                textSaldo.text = user?.saldo.toString()
-                textEmail.text = user?.email
-                if (user?.photoProfil == ""){
-                    photoProfil.setImageResource(R.drawable.ic_profile)
-                } else {
-                    Picasso.get().load(user?.photoProfil).into(photoProfil)
-                }
-            }
-            override fun onCancelled(databaseError: DatabaseError) {
-                // handle error
-            }
-        }
-        referen.addListenerForSingleValueEvent(menuListener)
+        // Memanggil fungsi keepData
+        keepData()
 
         // Jika userIdentity tidak null dan email dari user sudah terverifikasi, maka icVerified akan ditampilkan,
         // jika tidak maka sebaliknya
@@ -157,6 +154,27 @@ class ProfileFragment : Fragment() {
             }
         }
 
+    }
+
+    private fun keepData() {
+        // Mengambil data user dengan referen dan dimasukkan kedalam view (text,etc)
+        val menuListener = object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                val user = dataSnapshot.getValue(Users::class.java)
+                textName.text = user?.username
+                textSaldo.text = user?.saldo.toString()
+                textEmail.text = user?.email
+                if (user?.photoProfil == ""){
+                    photoProfil.setImageResource(R.drawable.ic_profile)
+                } else {
+                    Picasso.get().load(user?.photoProfil).into(photoProfil)
+                }
+            }
+            override fun onCancelled(databaseError: DatabaseError) {
+                // handle error
+            }
+        }
+        referen.addListenerForSingleValueEvent(menuListener)
     }
 
     // Membuat fungsi "loadingBar" dengan parameter time,

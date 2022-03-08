@@ -15,6 +15,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.faridwaid.banksampahmliriprowo.LoadingDialog
 import com.faridwaid.banksampahmliriprowo.LoginActivity
 import com.faridwaid.banksampahmliriprowo.R
@@ -37,6 +38,7 @@ class ProfileAdminFragment : Fragment() {
     private lateinit var etUsername: TextInputEditText
     private lateinit var etEmail: TextInputEditText
     private lateinit var etPassword: TextInputEditText
+    private lateinit var refreshData: SwipeRefreshLayout
     private var changeImage by Delegates.notNull<Boolean>()
 
     // Membuat companion object dari Image
@@ -65,6 +67,17 @@ class ProfileAdminFragment : Fragment() {
         etEmail = view.findViewById(R.id.etEmail)
         etPassword = view.findViewById(R.id.etPassword)
         changeImage = false
+        refreshData = view.findViewById(R.id.refreshData)
+
+        refreshData.setOnRefreshListener {
+            // Loading selama beberapa waktu, ketika sudah selesa nilai refreshFrament menjadi false
+            Handler().postDelayed(Runnable {
+                refreshData.isRefreshing = false
+            }, 2000)
+
+            // Memanggil fungsi keepData
+            keepData()
+        }
 
         // Membuat referen memiliki child userId, yang nantinya akan diisi oleh data user
         referen = FirebaseDatabase.getInstance().getReference("admins").child("admin")
@@ -72,23 +85,8 @@ class ProfileAdminFragment : Fragment() {
         // Memanggil fungsi loadingBar dan mengeset time = 4000
         loadingBar(2000)
 
-        // Mengambil data user dengan referen dan dimasukkan kedalam view (text,etc)
-        val menuListener = object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                val admin = dataSnapshot.getValue(Admin::class.java)
-                etUsername.setText("${admin?.username}")
-                etEmail.setText("${admin?.email}")
-                etPassword.setText("${admin?.password}")
-                if (admin?.photoProfil != ""){
-                    Picasso.get().load(admin?.photoProfil).into(photoProfil)
-                    textImage.visibility = View.INVISIBLE
-                }
-            }
-            override fun onCancelled(databaseError: DatabaseError) {
-                // handle error
-            }
-        }
-        referen.addListenerForSingleValueEvent(menuListener)
+        // Memanggil fungsi keepData
+        keepData()
 
         // Ketika "photoProfil" di klik, maka akan menjalankan fungsi pickImageGallery()
         photoProfil.setOnClickListener {
@@ -236,6 +234,26 @@ class ProfileAdminFragment : Fragment() {
             }
         }
 
+    }
+
+    private fun keepData() {
+        // Mengambil data user dengan referen dan dimasukkan kedalam view (text,etc)
+        val menuListener = object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                val admin = dataSnapshot.getValue(Admin::class.java)
+                etUsername.setText("${admin?.username}")
+                etEmail.setText("${admin?.email}")
+                etPassword.setText("${admin?.password}")
+                if (admin?.photoProfil != ""){
+                    Picasso.get().load(admin?.photoProfil).into(photoProfil)
+                    textImage.visibility = View.INVISIBLE
+                }
+            }
+            override fun onCancelled(databaseError: DatabaseError) {
+                // handle error
+            }
+        }
+        referen.addListenerForSingleValueEvent(menuListener)
     }
 
     // Membuat fungsi "alertDialog" dengan parameter title, message, dan backActivity

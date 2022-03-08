@@ -12,6 +12,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatImageView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.faridwaid.banksampahmliriprowo.BeginningAppActivity
 import com.faridwaid.banksampahmliriprowo.LoadingDialog
 import com.faridwaid.banksampahmliriprowo.R
@@ -38,6 +39,7 @@ class HomeFragment : Fragment() {
     private lateinit var textCountPenarikan: TextView
     private lateinit var textSaldoUser: TextView
     private lateinit var photoProfil: ImageView
+    private lateinit var refreshData: SwipeRefreshLayout
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -60,6 +62,17 @@ class HomeFragment : Fragment() {
         textCountPengumpulan = view.findViewById(R.id.countPengumpulan)
         textCountPenarikan = view.findViewById(R.id.countPenarikan)
         textSaldoUser = view.findViewById(R.id.saldoUser)
+        refreshData = view.findViewById(R.id.refreshData)
+
+        refreshData.setOnRefreshListener {
+            // Loading selama beberapa waktu, ketika sudah selesa nilai refreshFrament menjadi false
+            Handler().postDelayed(Runnable {
+                refreshData.isRefreshing = false
+            }, 2000)
+
+            // Memanggil fungsi keepData
+            keepData()
+        }
 
         // Membuat referen memiliki child userId, yang nantinya akan diisi oleh data user
         referen = FirebaseDatabase.getInstance().getReference("users").child("${userIdentity?.uid}")
@@ -67,28 +80,8 @@ class HomeFragment : Fragment() {
         // Memanggil fungsi loadingBar dan mengeset time = 4000
         loadingBar(1000)
 
-        // Mengambil data user dengan referen dan dimasukkan kedalam view (text,etc)
-        val menuListener = object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                val user = dataSnapshot.getValue(Users::class.java)
-                textName.setText("Hello ${user?.username}")
-                textCountPengumpulan.setText(user?.jumlahSetoran.toString())
-                textCountPenarikan.setText(user?.jumlahPenarikan.toString())
-                val formatter: NumberFormat = DecimalFormat("#,###")
-                val myNumber = user?.saldo
-                val formattedNumber: String = formatter.format(myNumber)
-                textSaldoUser.setText("Rp. $formattedNumber")
-                if (user?.photoProfil == ""){
-                    photoProfil.setImageResource(R.drawable.ic_profile)
-                } else {
-                    Picasso.get().load(user?.photoProfil).into(photoProfil)
-                }
-            }
-            override fun onCancelled(databaseError: DatabaseError) {
-                // handle error
-            }
-        }
-        referen.addListenerForSingleValueEvent(menuListener)
+        // Memanggil fungsi keepData
+        keepData()
 
         // Mendefinisikan variabel item layout pengumpulan
         // overridePendingTransition digunakan untuk animasi dari intent
@@ -189,6 +182,31 @@ class HomeFragment : Fragment() {
             }
         }
 
+    }
+
+    private fun keepData() {
+        // Mengambil data user dengan referen dan dimasukkan kedalam view (text,etc)
+        val menuListener = object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                val user = dataSnapshot.getValue(Users::class.java)
+                textName.setText("Hello ${user?.username}")
+                textCountPengumpulan.setText(user?.jumlahSetoran.toString())
+                textCountPenarikan.setText(user?.jumlahPenarikan.toString())
+                val formatter: NumberFormat = DecimalFormat("#,###")
+                val myNumber = user?.saldo
+                val formattedNumber: String = formatter.format(myNumber)
+                textSaldoUser.setText("Rp. $formattedNumber")
+                if (user?.photoProfil == ""){
+                    photoProfil.setImageResource(R.drawable.ic_profile)
+                } else {
+                    Picasso.get().load(user?.photoProfil).into(photoProfil)
+                }
+            }
+            override fun onCancelled(databaseError: DatabaseError) {
+                // handle error
+            }
+        }
+        referen.addListenerForSingleValueEvent(menuListener)
     }
 
     // Membuat fungsi "loadingBar" dengan parameter time,

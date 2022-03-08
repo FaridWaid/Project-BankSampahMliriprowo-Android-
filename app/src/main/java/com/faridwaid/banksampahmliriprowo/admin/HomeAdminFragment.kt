@@ -1,5 +1,6 @@
 package com.faridwaid.banksampahmliriprowo.admin
 
+import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.os.Bundle
@@ -10,6 +11,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.faridwaid.banksampahmliriprowo.ForgotPasswordActivity
 import com.faridwaid.banksampahmliriprowo.LoadingDialog
 import com.faridwaid.banksampahmliriprowo.R
@@ -37,6 +42,7 @@ class HomeAdminFragment : Fragment() {
     private lateinit var textCountAnggota: TextView
     private lateinit var textCountSampah: TextView
     private lateinit var photoProfil: ImageView
+    private lateinit var refreshData: SwipeRefreshLayout
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -55,6 +61,17 @@ class HomeAdminFragment : Fragment() {
         textSaldoBank = view.findViewById(R.id.saldoBank)
         textCountAnggota = view.findViewById(R.id.countAnggota)
         textCountSampah = view.findViewById(R.id.countSampah)
+        refreshData = view.findViewById(R.id.refreshData)
+
+        refreshData.setOnRefreshListener {
+            // Loading selama beberapa waktu, ketika sudah selesa nilai refreshFrament menjadi false
+            Handler().postDelayed(Runnable {
+                refreshData.isRefreshing = false
+            }, 2000)
+
+            // Memanggil fungsi keepData
+            keepData()
+        }
 
         // Membuat referen memiliki child userId, yang nantinya akan diisi oleh data user
         referen = FirebaseDatabase.getInstance().getReference("admins").child("admin")
@@ -65,71 +82,8 @@ class HomeAdminFragment : Fragment() {
         // Memanggil fungsi loadingBar dan mengeset time = 4000
         loadingBar(2000)
 
-        // Mengambil data user dengan referen dan dimasukkan kedalam view (text,etc)
-        val menuListener = object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                val admin = dataSnapshot.getValue(Admin::class.java)
-                textName.setText("Hello ${admin?.username}")
-                if (admin?.photoProfil == ""){
-                    photoProfil.setImageResource(R.drawable.ic_profile)
-                } else {
-                    Picasso.get().load(admin?.photoProfil).into(photoProfil)
-                }
-            }
-            override fun onCancelled(databaseError: DatabaseError) {
-                // handle error
-            }
-        }
-        referen.addListenerForSingleValueEvent(menuListener)
-
-        // Mengambil data saldo bank sampah dengan referenceBankSampah dan dimasukkan kedalam view (text,etc)
-        referenceBankSampah.addListenerForSingleValueEvent(object : ValueEventListener{
-            override fun onDataChange(snapshot: DataSnapshot) {
-                val bank = snapshot.getValue(BankSampah::class.java)!!
-                val formatter: NumberFormat = DecimalFormat("#,###")
-                val myNumber = bank?.totalSaldo
-                val formattedNumber: String = formatter.format(myNumber)
-                textSaldoBank.setText("Rp. ${formattedNumber}")
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
-            }
-
-        })
-
-        // Mengambil data count anggota dengan referenceAnggota dan dimasukkan kedalam view (text,etc)
-        referenceAnggota.addListenerForSingleValueEvent(object : ValueEventListener{
-            override fun onDataChange(snapshot: DataSnapshot) {
-                var countAnggota = 0
-                for (i in snapshot.children){
-                    countAnggota += 1
-                }
-                textCountAnggota.setText(countAnggota.toString())
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
-            }
-
-        })
-
-        // Mengambil data count jumlah sampah dengan referenceSampah dan dimasukkan kedalam view (text,etc)
-        referenceSampah.addListenerForSingleValueEvent(object : ValueEventListener{
-            override fun onDataChange(snapshot: DataSnapshot) {
-                var countSampah = 0
-                for (i in snapshot.children){
-                    val sampah = i.getValue(DaftarSampah::class.java)
-                    countSampah += sampah?.stockSampah!!
-                }
-                textCountSampah.setText(countSampah.toString())
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
-            }
-
-        })
+        // Memanggil fungsi keepData
+        keepData()
 
         // Mendefinisikan variabel item fitur 1
         // overridePendingTransition digunakan untuk animasi dari intent
@@ -210,6 +164,75 @@ class HomeAdminFragment : Fragment() {
 
     }
 
+    // Fungsi untuk mengambil data dari database
+    private fun keepData() {
+        // Mengambil data user dengan referen dan dimasukkan kedalam view (text,etc)
+        val menuListener = object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                val admin = dataSnapshot.getValue(Admin::class.java)
+                textName.setText("Hello ${admin?.username}")
+                if (admin?.photoProfil == ""){
+                    photoProfil.setImageResource(R.drawable.ic_profile)
+                } else {
+                    Picasso.get().load(admin?.photoProfil).into(photoProfil)
+                }
+            }
+            override fun onCancelled(databaseError: DatabaseError) {
+                // handle error
+            }
+        }
+        referen.addListenerForSingleValueEvent(menuListener)
+
+        // Mengambil data saldo bank sampah dengan referenceBankSampah dan dimasukkan kedalam view (text,etc)
+        referenceBankSampah.addListenerForSingleValueEvent(object : ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val bank = snapshot.getValue(BankSampah::class.java)!!
+                val formatter: NumberFormat = DecimalFormat("#,###")
+                val myNumber = bank?.totalSaldo
+                val formattedNumber: String = formatter.format(myNumber)
+                textSaldoBank.setText("Rp. ${formattedNumber}")
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+
+        })
+
+        // Mengambil data count anggota dengan referenceAnggota dan dimasukkan kedalam view (text,etc)
+        referenceAnggota.addListenerForSingleValueEvent(object : ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                var countAnggota = 0
+                for (i in snapshot.children){
+                    countAnggota += 1
+                }
+                textCountAnggota.setText(countAnggota.toString())
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+
+        })
+
+        // Mengambil data count jumlah sampah dengan referenceSampah dan dimasukkan kedalam view (text,etc)
+        referenceSampah.addListenerForSingleValueEvent(object : ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                var countSampah = 0
+                for (i in snapshot.children){
+                    val sampah = i.getValue(DaftarSampah::class.java)
+                    countSampah += sampah?.stockSampah!!
+                }
+                textCountSampah.setText("$countSampah KG")
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+
+        })
+    }
+
     // Membuat fungsi "loadingBar" dengan parameter time,
     // Fungsi ini digunakan untuk menampilkan loading dialog
     private fun loadingBar(time: Long) {
@@ -223,6 +246,5 @@ class HomeAdminFragment : Fragment() {
 
         }, time)
     }
-
 
 }
