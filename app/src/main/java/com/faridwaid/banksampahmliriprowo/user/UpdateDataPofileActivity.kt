@@ -34,6 +34,7 @@ import de.hdodenhof.circleimageview.CircleImageView
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.math.BigInteger
+import kotlin.properties.Delegates
 
 class UpdateDataPofileActivity : AppCompatActivity() {
 
@@ -49,6 +50,7 @@ class UpdateDataPofileActivity : AppCompatActivity() {
     private lateinit var emailContainer: TextInputLayout
     private lateinit var photoProfil: CircleImageView
     private lateinit var textImage: TextView
+    private var changeImage by Delegates.notNull<Boolean>()
 
     // Membuat companion object dari Image
     companion object{
@@ -76,6 +78,7 @@ class UpdateDataPofileActivity : AppCompatActivity() {
         emailContainer = findViewById(R.id.emailContainer)
         photoProfil = findViewById(R.id.ivProfile)
         textImage = findViewById(R.id.textImage)
+        changeImage = false
 
         // Membuat referen memiliki child userId, yang nantinya akan diisi oleh data user
         referen = FirebaseDatabase.getInstance().getReference("users").child("${userIdentity?.uid}")
@@ -166,7 +169,22 @@ class UpdateDataPofileActivity : AppCompatActivity() {
                                         referen.addListenerForSingleValueEvent(menuListener)
                                     }
                                 }
-                            } else {
+                            } else if (changeImage == false){
+                                // Mengupdate child yang ada pada reference dengan inputan baru,
+                                val menuListener = object : ValueEventListener {
+                                    override fun onDataChange(dataSnapshot: DataSnapshot) {
+                                        val user = dataSnapshot.getValue(Users::class.java)
+                                        val userUpdate = Users(userIdentity?.uid!!,username, email, user?.photoProfil!!, user?.jumlahSetoran!!, user?.jumlahPenarikan!!, user?.saldo!!, user?.token!!)
+                                        referen.setValue(userUpdate)
+                                    }
+                                    override fun onCancelled(databaseError: DatabaseError) {
+                                        // handle error
+                                    }
+                                }
+
+                                referen.addListenerForSingleValueEvent(menuListener)
+                            }
+                            else {
                                 refImage.putFile(imageUri).addOnSuccessListener {
                                     var downloadUrl: Uri? = null
                                     refImage.downloadUrl.addOnSuccessListener { it1 ->
@@ -263,20 +281,6 @@ class UpdateDataPofileActivity : AppCompatActivity() {
         alertDialog.show()
     }
 
-    // Membuat fungsi "loadingBar" dengan parameter time,
-    // Fungsi ini digunakan untuk menampilkan loading dialog
-    private fun loadingBar(time: Long) {
-        val loading = LoadingDialog(this)
-        loading.startDialog()
-        val handler = Handler()
-        handler.postDelayed(object: Runnable{
-            override fun run() {
-                loading.isDissmis()
-            }
-
-        }, time)
-    }
-
     // Membuat fungsi "pickImageGallery",
     // Fungsi ini digunakan untuk memilik photo dari gallery
     private fun pickImageGallery() {
@@ -294,6 +298,7 @@ class UpdateDataPofileActivity : AppCompatActivity() {
             photoProfil.setImageURI(data?.data)
             imageUri = Uri.parse("${data?.data}")
             textImage.visibility = View.INVISIBLE
+            changeImage = true
         }
     }
 
