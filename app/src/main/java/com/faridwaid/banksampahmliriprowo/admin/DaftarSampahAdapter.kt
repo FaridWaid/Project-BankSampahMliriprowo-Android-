@@ -24,17 +24,16 @@ class DaftarSampahAdapter(val list: ArrayList<DaftarSampah>, val method: DaftarS
     // kemudian variabel method digunakan untuk memanggil method dari class lain
     inner class DaftarViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
         val typeSampah: TextView = itemView.findViewById(R.id.typeSampah)
-        val priceSampah: TextView = itemView.findViewById(R.id.priceSampah)
         val descriptionSampah: TextView = itemView.findViewById(R.id.descriptionSampah)
         val stockSampah: TextView = itemView.findViewById(R.id.stockSampah)
         val imageSampah: RoundedImageView = itemView.findViewById(R.id.imageSampah)
         fun bind(sampah: DaftarSampah){
             with(itemView){
-                typeSampah.text = sampah.nameSampah.toUpperCase()
+                val nameSampah = sampah.nameSampah.toUpperCase()
                 val formatter: NumberFormat = DecimalFormat("#,###")
                 val myNumber = sampah.priceSampah.toLong()
                 val formattedNumber: String = formatter.format(myNumber)
-                priceSampah.text = "Rp. $formattedNumber / KG"
+                typeSampah.text = "$nameSampah (Rp. $formattedNumber / KG)"
                 descriptionSampah.text = "${sampah.descriptionSampah}"
                 stockSampah.text = "${sampah.stockSampah}"
                 Picasso.get().load(sampah.photoSampah).into(imageSampah)

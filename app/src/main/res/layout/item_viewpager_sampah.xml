@@ -40,26 +40,6 @@
             app:layout_constraintTop_toBottomOf="@id/imageSampah"/>
 
         <TextView
-            android:id="@+id/price"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="3dp"
-            android:text="@string/harga"
-            android:textColor="@color/primary_text"
-            android:textSize="11sp"
-            app:layout_constraintTop_toBottomOf="@id/typeSampah"/>
-
-        <TextView
-            android:id="@+id/priceSampah"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="3dp"
-            android:text="@string/harga_sampah"
-            android:textColor="@color/secondary_text"
-            android:textSize="10sp"
-            app:layout_constraintTop_toBottomOf="@id/price"/>
-
-        <TextView
             android:id="@+id/description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -67,7 +47,7 @@
             android:text="@string/keterangan"
             android:textColor="@color/primary_text"
             android:textSize="11sp"
-            app:layout_constraintTop_toBottomOf="@id/priceSampah"/>
+            app:layout_constraintTop_toBottomOf="@id/typeSampah"/>
 
         <TextView
             android:id="@+id/descriptionSampah"

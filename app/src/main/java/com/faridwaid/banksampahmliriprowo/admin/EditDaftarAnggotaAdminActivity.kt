@@ -163,7 +163,7 @@ class EditDaftarAnggotaAdminActivity : AppCompatActivity() {
                     }
                 }
                 reference.addListenerForSingleValueEvent(menuListener)
-                alertDialog("Konfirmasi!", "Sampah berhasil diperbarui!", true)
+                alertDialog("Konfirmasi!", "Data anggota berhasil diperbarui!", true)
             } else{
                 alertDialog("Gagal!", "Gagal memperbarui sampah!", false)
             }

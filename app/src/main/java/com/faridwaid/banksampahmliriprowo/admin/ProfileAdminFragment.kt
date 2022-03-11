@@ -153,7 +153,7 @@ class ProfileAdminFragment : Fragment() {
                         // Mengupdate child yang ada pada reference dengan inputan baru,
                         val menuListener = object : ValueEventListener {
                             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                                val adminUpdate = Admin(username, email, password, downloadUrl.toString())
+                                val adminUpdate = Admin("admin", username, email, password, downloadUrl.toString())
                                 referen.setValue(adminUpdate).addOnCompleteListener {
                                     // Memanggil fungsi loadingBar dan mengeset time = 4000
                                     loadingBar(1000)
@@ -177,7 +177,7 @@ class ProfileAdminFragment : Fragment() {
                 val menuListener = object : ValueEventListener {
                     override fun onDataChange(dataSnapshot: DataSnapshot) {
                         val admin = dataSnapshot.getValue(Admin::class.java)
-                        val adminUpdate = Admin(username, email, password, admin?.photoProfil!!)
+                        val adminUpdate = Admin("admin", username, email, password, admin?.photoProfil!!)
                         referen.setValue(adminUpdate).addOnCompleteListener {
                             loadingBar(3000)
                             if (it.isSuccessful){
@@ -201,7 +201,7 @@ class ProfileAdminFragment : Fragment() {
                         // Mengupdate child yang ada pada reference dengan inputan baru,
                         val menuListener = object : ValueEventListener {
                             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                                val adminUpdate = Admin(username, email, password, downloadUrl.toString())
+                                val adminUpdate = Admin("admin", username, email, password, downloadUrl.toString())
                                 referen.setValue(adminUpdate).addOnCompleteListener {
                                     loadingBar(3000)
                                     if (it.isSuccessful){
